@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import BannerWallpaper from './BannerWallpaper.astro';
+import VueTypewriter from './VueTypewriter.vue';
 import { siteConfig } from '@/config/site';
 
 // Glob 导入 src/assets/images/ 下的所有图片
@@ -44,9 +45,9 @@ const { title = siteConfig.name, description = siteConfig.description } = Astro.
         {title}
       </h1>
 
-      <!-- 描述 -->
+      <!-- 描述（打字机效果） -->
       <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
-        {description}
+        <VueTypewriter client:visible text={description} :delay="500" :speed="60" :showCursor="false" />
       </p>
     </div>
   </div>
