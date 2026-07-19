@@ -32,6 +32,8 @@ interface Props extends SEOProps {}
       try {
         const response = await fetch(scriptUrl, { method: 'HEAD' });
         if (response.status !== 200) {
+          console.warn('Pagefind script not found at', scriptUrl);
+          window.dispatchEvent(new Event('pagefindloaderror'));
           return;
         }
         const pagefind = await import(scriptUrl);
