@@ -3,12 +3,19 @@ import type { CollectionEntry } from 'astro:content';
 export type BlogPost = CollectionEntry<'blog'>;
 
 /**
+ * 统计正文字数（去除代码块、行内代码与空白字符）
+ */
+export function getWordCount(body: string): number {
+  const text = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+  return text.replace(/\s/g, '').length;
+}
+
+/**
  * 估算阅读时间(分钟)
  * 移除代码块后按 ~400 字/分钟计算
  */
 export function getReadingTime(body: string): number {
-  const text = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
-  const charCount = text.replace(/\s/g, '').length;
+  const charCount = getWordCount(body);
   return Math.max(1, Math.ceil(charCount / 400));
 }
 

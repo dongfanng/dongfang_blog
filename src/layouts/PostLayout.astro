@@ -10,7 +10,7 @@ import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
 import VueLightbox from '@/components/article/VueLightbox.vue';
 import VueTocHighlight from '@/components/article/VueTocHighlight.vue';
 import type { BlogPost } from '@/utils/posts';
-import { getReadingTime } from '@/utils/posts';
+import { getReadingTime, getWordCount } from '@/utils/posts';
 
 interface Props {
   post: BlogPost;
@@ -25,6 +25,7 @@ const { post, headings = [], prev, next, related, lastModified } = Astro.props;
 const { title, description, pubDate, category, tags, image } = post.data;
 const updatedDate = post.data.updatedDate || (lastModified ? new Date(lastModified) : null);
 const readingTime = getReadingTime(post.body);
+const wordCount = getWordCount(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
@@ -43,15 +44,14 @@ const readingTime = getReadingTime(post.body);
         <time class="text-sm text-gray-500 dark:text-gray-400">
           发布于 {formatDate(pubDate)}
         </time>
-        <span class="text-sm text-gray-400 dark:text-gray-500">·</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">·</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          {wordCount} 字
+        </span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">·</span>
         <span class="text-sm text-gray-500 dark:text-gray-400">
           约 {readingTime} 分钟阅读
         </span>
-        {updatedDate && (
-          <time class="text-sm text-gray-500 dark:text-gray-400">
-            · 更新于 {formatDate(updatedDate)}
-          </time>
-        )}
       </div>
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
         {title}
