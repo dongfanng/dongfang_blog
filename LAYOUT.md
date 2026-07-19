@@ -59,7 +59,7 @@
 
   <!-- TOC：fixed 定位，脱离正常流，不挤占正文 -->
   {headings.length > 0 && (
-    <aside class="hidden 2xl:block fixed top-24 z-30 w-64"
+    <aside class="hidden xl:block fixed top-24 z-30 w-48"
            style="left: calc(50% + 30rem);">
       <div class="max-h-[calc(100vh-6rem)] overflow-y-auto">
         <TableOfContents headings={headings} />
@@ -77,7 +77,7 @@
 |       [Header max-w-4xl 居中]         |
 |                                       |
 |       [----正文 max-w-4xl----][TOC]   |
-|       [    56rem 居中      ][16rem]  |
+|       [    56rem 居中      ][12rem]  |
 |       ↑ 正文与 Header 严格对齐        |
 |                                       |
 |       [Footer max-w-4xl 居中]         |
@@ -87,24 +87,25 @@
 - 正文：max-w-4xl = 56rem，居中
 - 正文右边界：50% + 28rem
 - TOC 左边界：`calc(50% + 30rem)` = 正文右边界 + 2rem gap
-- TOC 宽度：w-64 = 16rem
-- TOC 右边界：50% + 30rem + 16rem = 50% + 46rem
+- TOC 宽度：w-48 = 12rem
+- TOC 右边界：50% + 30rem + 12rem = 50% + 42rem
 
 ### 断点选择
 
-TOC 显示断点为 `2xl`（1536px），原因：
+TOC 显示断点为 `xl`（1280px），原因：
 
 | 断点 | 视口宽度 | TOC 右边界 | 是否容纳 |
 |---|---|---|---|
-| lg | 1024px (64rem) | 50%+46rem = 78rem | 超出 14rem |
-| xl | 1280px (80rem) | 50%+46rem = 86rem | 超出 6rem |
-| 2xl | 1536px (96rem) | 50%+46rem = 94rem | 剩余 2rem |
+| lg | 1024px (64rem) | 50%+42rem = 74rem | 超出 10rem |
+| xl | 1280px (80rem) | 50%+42rem = 82rem | 剩余 8rem |
+| 2xl | 1536px (96rem) | 50%+42rem = 90rem | 剩余 6rem |
 
-只有 2xl 断点能容纳正文(56rem) + gap(2rem) + TOC(16rem) + 左右边距。
+xl 断点能容纳正文(56rem) + gap(2rem) + TOC(12rem) + 左右边距。
 
-### 如需在更窄断点显示 TOC
+### 更窄屏幕的 TOC 方案
 
-1. **缩小 TOC**：`w-64` 改 `w-48`（12rem），断点可降到 `xl`，但 TOC 偏窄
+如需在 lg 断点也显示 TOC，可以：
+1. **继续缩小 TOC**：`w-48` 改 `w-40`（10rem）
 2. **窄屏用浮动按钮**：在 xl 以下显示 TOC 按钮，点击弹出面板（需额外组件）
 3. **调整正文宽度**：缩小 max-w-4xl，但会影响全站一致性
 
