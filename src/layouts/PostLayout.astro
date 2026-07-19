@@ -61,7 +61,7 @@ const wordCount = getWordCount(post.body);
         {description}
       </p>
       <div class="flex flex-wrap gap-2">
-        {tags.map((tag) => (
+        {tags.map((tag: string) => (
           <a
             href={`/blog/tags/${tag}`}
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -77,14 +77,14 @@ const wordCount = getWordCount(post.body);
         <img
           src={image}
           alt={title}
-          class="w-full aspect-[16/9] object-cover rounded-2xl mb-8"
+          class="w-full aspect-video object-cover rounded-2xl mb-8"
           loading="lazy"
         />
       ) : (
         <Image
           src={image}
           alt={title}
-          class="w-full aspect-[16/9] object-cover rounded-2xl mb-8"
+          class="w-full aspect-video object-cover rounded-2xl mb-8"
           widths={[480, 800, 1200]}
           sizes="(max-width: 768px) 100vw, 768px"
         />
