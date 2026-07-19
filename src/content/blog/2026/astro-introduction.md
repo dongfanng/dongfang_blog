@@ -54,3 +54,5 @@ const title = 'Hello, Astro!';
 ## 总结
 
 Astro 是一个非常优秀的静态站点生成器，特别适合内容网站。
+
+测试更新时间
