@@ -215,7 +215,6 @@
 
   .dark pre[data-language]:not([data-language=""])::before {
     color: rgb(148 163 184);
-    background-color: rgba(255, 255, 255, 0.06);
   }
 
   /* 带 figcaption 时,语言标签本就不显示,恢复 padding */

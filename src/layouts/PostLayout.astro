@@ -29,9 +29,8 @@ const readingTime = getReadingTime(post.body);
   <VueLightbox client:idle />
   <VueTocHighlight client:idle />
 
-  <div class="container-wide py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-8">
-      <article class="min-w-0 max-w-4xl">
+  <div class="container-prose py-8">
+    <article>
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
         <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
@@ -115,17 +114,16 @@ const readingTime = getReadingTime(post.body);
         </div>
       </section>
     )}
-      </article>
-
-      {headings.length > 0 && (
-        <aside class="hidden lg:block">
-          <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-6">
-            <TableOfContents headings={headings} />
-          </div>
-        </aside>
-      )}
-    </div>
+    </article>
   </div>
 
-  <VueBackToTop client:visible />
+  {headings.length > 0 && (
+    <aside class="hidden 2xl:block fixed top-24 z-30 w-64" style="left: calc(50% + 30rem);">
+      <div class="max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <TableOfContents headings={headings} />
+      </div>
+    </aside>
+  )}
+
+  <VueBackToTop client:idle />
 </BaseLayout>
