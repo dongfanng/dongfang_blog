@@ -244,3 +244,36 @@
   color: var(--theme-primary-dark);
 }
 
+/* TOC 当前章节高亮 */
+.toc a {
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.toc a.toc-active {
+  color: var(--theme-primary);
+  font-weight: 600;
+  border-left-color: var(--theme-primary);
+}
+
+.dark .toc a.toc-active {
+  color: var(--theme-primary-dark);
+  border-left-color: var(--theme-primary-dark);
+}
+
+/* 外链标识:自动给 target="_blank" 链接加 ↗ 图标 */
+.prose a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.875em;
+  opacity: 0.6;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* 链接内含图片时不显示图标 */
+.prose a[target="_blank"]:has(img)::after {
+  content: none;
+}
+

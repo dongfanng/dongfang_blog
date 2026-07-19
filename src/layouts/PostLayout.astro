@@ -6,6 +6,7 @@ import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
 import VueBackToTop from '@/components/ui/VueBackToTop.vue';
 import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
 import VueLightbox from '@/components/article/VueLightbox.vue';
+import VueTocHighlight from '@/components/article/VueTocHighlight.vue';
 import type { BlogPost } from '@/utils/posts';
 import { getReadingTime } from '@/utils/posts';
 
@@ -25,8 +26,12 @@ const readingTime = getReadingTime(post.body);
 <BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate} category={category} tags={tags}>
   <VueReadingProgress client:visible />
   <VueCodeCopy client:load />
-  <VueLightbox client:load />
-  <article class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <VueLightbox client:idle />
+  <VueTocHighlight client:idle />
+
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-8">
+      <article class="min-w-0 max-w-4xl">
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
         <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
@@ -110,15 +115,17 @@ const readingTime = getReadingTime(post.body);
         </div>
       </section>
     )}
+      </article>
 
-    {headings.length > 0 && (
-      <aside class="hidden lg:block absolute left-full ml-4 top-8 w-44 z-30">
-        <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
-          <TableOfContents headings={headings} />
-        </div>
-      </aside>
-    )}
-  </article>
+      {headings.length > 0 && (
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-6">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      )}
+    </div>
+  </div>
 
   <VueBackToTop client:visible />
 </BaseLayout>

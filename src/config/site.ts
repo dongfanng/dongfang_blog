@@ -16,7 +16,7 @@ export const siteConfig = {
 
   /** 社交链接 */
   social: {
-    github: 'https://github.com/dongfanng',
+    github: 'https://github.com/dongfanng/dongfang_blog',
     rss: '/rss.xml',
   },
 

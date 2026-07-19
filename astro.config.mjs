@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import vue from '@astrojs/vue';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeExternalLinks from 'rehype-external-links';
 import icon from 'astro-icon';
 import { siteConfig } from './src/config/site';
 
@@ -26,7 +27,14 @@ export default defineConfig({
     icon(),
   ],
   markdown: {
-    rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+    rehypePlugins: [
+      [rehypeExternalLinks, {
+        target: '_blank',
+        rel: ['noopener', 'noreferrer'],
+        protocols: ['http', 'https'],
+      }],
+      [rehypePrettyCode, prettyCodeOptions],
+    ],
   },
   vite: {
     build: {
