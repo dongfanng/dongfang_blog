@@ -169,7 +169,8 @@ onMounted(() => {
     if ((window as any).pagefind) {
       initialize();
     } else {
-      document.addEventListener('pagefindready', initialize, { once: true });
+      window.addEventListener('pagefindready', initialize, { once: true });
+      window.addEventListener('pagefindloaderror', initialize, { once: true });
     }
   } else {
     console.log('Development advanced search mode enabled');
