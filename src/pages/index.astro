@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/article/ArticleCard.astro';
+import HeroBanner from '@/components/banner/HeroBanner.astro';
+import { sortPosts, getCategories, getTags } from '@/utils/posts';
+import { siteConfig } from '@/config/site';
+
+const posts = await getCollection('blog');
+const sortedPosts = sortPosts(posts);
+const recentPosts = sortedPosts.slice(0, siteConfig.home.recentPostsCount);
+const categories = getCategories(posts);
+const tags = getTags(posts);
+---
+
+<BaseLayout title={siteConfig.name} description={siteConfig.description}>
+  <!-- 横幅壁纸 Hero -->
+  <HeroBanner />
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- 最新文章 -->
+    <section class="mb-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">最新文章</h2>
+        <a href="/blog" class="theme-primary hover:underline">
+          查看全部 →
+        </a>
+      </div>
+      <div class="grid gap-6">
+        {recentPosts.map((post) => (
+          <ArticleCard post={post} />
+        ))}
+      </div>
+    </section>
+
+    <!-- 分类和标签 -->
+    <section class="grid md:grid-cols-2 gap-8">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">分类</h2>
+        <div class="flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <a
+              href={`/blog/categories/${category}`}
+              class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            >
+              {category}
+            </a>
+          ))}
+        </div>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">标签</h2>
+        <div class="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <a
+              href={`/blog/tags/${tag}`}
+              class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate } from '@/utils/date';
+import TableOfContents from '@/components/article/TableOfContents.astro';
+import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
+import VueBackToTop from '@/components/ui/VueBackToTop.vue';
+import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
+import type { BlogPost } from '@/utils/posts';
+
+interface Props {
+  post: BlogPost;
+  headings?: { depth: number; text: string; slug: string }[];
+  prev?: BlogPost | null;
+  next?: BlogPost | null;
+  related?: BlogPost[];
+}
+
+const { post, headings = [], prev, next, related } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, image } = post.data;
+---
+
+<BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate} category={category} tags={tags}>
+  <VueReadingProgress client:visible />
+  <VueCodeCopy client:load />
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div class="lg:col-span-3">
+        <header class="mb-8">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+              {category}
+            </a>
+            <time class="text-sm text-gray-500 dark:text-gray-400">
+              发布于 {formatDate(pubDate)}
+            </time>
+            {updatedDate && (
+              <time class="text-sm text-gray-500 dark:text-gray-400">
+                · 更新于 {formatDate(updatedDate)}
+              </time>
+            )}
+          </div>
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            {title}
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
+            {description}
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <a
+                href={`/blog/tags/${tag}`}
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        </header>
+
+        <div class="prose dark:prose-invert max-w-none">
+          <slot />
+        </div>
+
+        {(prev || next) && (
+          <nav class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {prev && (
+                <a href={`/blog/${prev.slug}`} class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+                  <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">← 上一篇</div>
+                  <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors">
+                    {prev.data.title}
+                  </div>
+                </a>
+              )}
+              {next && (
+                <a href={`/blog/${next.slug}`} class={`group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors text-right ${prev ? '' : 'md:col-start-2'}`}>
+                  <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">下一篇 →</div>
+                  <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors">
+                    {next.data.title}
+                  </div>
+                </a>
+              )}
+            </div>
+          </nav>
+        )}
+
+        {related && related.length > 0 && (
+          <section class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">相关文章</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {related.map((p) => (
+                <a
+                  href={`/blog/${p.slug}`}
+                  class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
+                >
+                  <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors line-clamp-2">
+                    {p.data.title}
+                  </div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    {formatDate(p.data.pubDate)}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <aside class="hidden lg:block lg:col-span-1">
+        {headings.length > 0 && <TableOfContents headings={headings} />}
+      </aside>
+    </div>
+  </article>
+  <VueBackToTop client:visible />
+</BaseLayout>

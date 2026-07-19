@@ -1,0 +1,24 @@
+---
+export interface Props {
+  date: string;
+  href: string;
+  title: string;
+}
+
+const { date, href, title } = Astro.props;
+---
+
+<li class="relative">
+  <div class="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-600 border-2 border-white dark:border-gray-900 z-10"></div>
+  <div class="flex flex-col sm:flex-row sm:items-baseline gap-2">
+    <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">
+      {date}
+    </span>
+    <a
+      href={href}
+      class="text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+    >
+      {title}
+    </a>
+  </div>
+</li>

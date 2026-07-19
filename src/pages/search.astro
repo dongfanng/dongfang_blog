@@ -1,0 +1,36 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdvancedSearch from '@/components/search/AdvancedSearch.vue';
+---
+
+<BaseLayout title="搜索" description="搜索文章">
+  <div class="max-w-4xl mx-auto px-4 py-8 min-h-[80vh]">
+    <AdvancedSearch client:load />
+  </div>
+</BaseLayout>
+
+{import.meta.env.PROD && (
+<script is:inline>
+  if (!window.pagefind) {
+    async function loadPagefind() {
+      const scriptUrl = '/pagefind/pagefind.js';
+      try {
+        const response = await fetch(scriptUrl, { method: 'HEAD' });
+        if (response.status !== 200) {
+          return;
+        }
+        const pagefind = await import(scriptUrl);
+        await pagefind.options({
+          "excerptLength": 20
+        });
+        window.pagefind = pagefind;
+        window.dispatchEvent(new Event('pagefindready'));
+      } catch (error) {
+        console.warn("Pagefind script not found or failed to load.");
+        window.dispatchEvent(new Event('pagefindloaderror'));
+      }
+    }
+    loadPagefind();
+  }
+</script>
+)}

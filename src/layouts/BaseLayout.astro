@@ -1,0 +1,51 @@
+---
+import BaseHead from '@/components/layout/BaseHead.astro';
+import VueHeader from '@/components/layout/VueHeader.vue';
+import Footer from '@/components/layout/Footer.astro';
+import VueClickEffect from '@/components/ui/VueClickEffect.vue';
+import VueConsoleEasterEgg from '@/components/ui/VueConsoleEasterEgg.vue';
+import '@/styles/global.css';
+import type { SEOProps } from '@/utils/seo';
+
+interface Props extends SEOProps {}
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <BaseHead {...Astro.props} />
+  <body class="min-h-screen flex flex-col">
+    <VueHeader client:load />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <VueClickEffect client:load />
+    <VueConsoleEasterEgg client:load />
+  </body>
+</html>
+
+{import.meta.env.PROD && (
+<script is:inline>
+  if (!window.pagefind) {
+    async function loadPagefind() {
+      const scriptUrl = '/pagefind/pagefind.js';
+      try {
+        const response = await fetch(scriptUrl, { method: 'HEAD' });
+        if (response.status !== 200) {
+          return;
+        }
+        const pagefind = await import(scriptUrl);
+        await pagefind.options({
+          "excerptLength": 20
+        });
+        window.pagefind = pagefind;
+        window.dispatchEvent(new Event('pagefindready'));
+      } catch (error) {
+        console.warn("Pagefind script not found or failed to load.");
+        window.dispatchEvent(new Event('pagefindloaderror'));
+      }
+    }
+    loadPagefind();
+  }
+</script>
+)}

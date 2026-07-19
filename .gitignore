@@ -1,0 +1,22 @@
+# build output
+dist
+.astro
+.types
+
+# dependencies
+node_modules
+
+# environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

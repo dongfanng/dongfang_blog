@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --theme-primary: #3b82f6;
+    --theme-primary-dark: #60a5fa;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200;
+  }
+
+  .prose {
+    max-width: none;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    color: inherit;
+    font-weight: bold;
+    scroll-margin-top: 6rem;
+  }
+
+  .prose h1 {
+    font-size: 1.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose h2 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom-width: 1px;
+    border-color: rgb(229 231 235);
+  }
+
+  .prose h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose h4 {
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.625;
+  }
+
+  .prose a {
+    color: var(--theme-primary);
+  }
+
+  .dark .prose a {
+    color: var(--theme-primary-dark);
+  }
+
+  .prose a:hover {
+    text-decoration: underline;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose li {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .prose blockquote {
+    border-left-width: 4px;
+    border-left-color: var(--theme-primary);
+    padding-left: 1rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    color: rgb(55 65 81);
+  }
+
+  .prose img {
+    border-radius: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose table {
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+  }
+
+  .prose th,
+  .prose td {
+    border-width: 1px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .prose th {
+    background-color: rgb(243 244 246);
+  }
+
+  .dark .prose h2 {
+    border-color: rgb(55 65 81);
+  }
+
+  .dark .prose h1,
+  .dark .prose h2,
+  .dark .prose h3,
+  .dark .prose h4 {
+    color: rgb(249 250 251);
+  }
+
+  .dark .prose blockquote {
+    color: rgb(209 213 219);
+    border-left-color: var(--theme-primary-dark);
+  }
+
+  .dark .prose th {
+    background-color: rgb(31 41 55);
+  }
+
+  .dark .prose th,
+  .dark .prose td {
+    border-color: rgb(75 85 99);
+  }
+
+  pre {
+    position: relative;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  pre > code {
+    display: grid;
+  }
+
+  figure[data-rehype-pretty-code-figure] {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  figcaption[data-rehype-pretty-code-title] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: rgb(75 85 99);
+    background-color: rgb(243 244 246);
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-width: 1px;
+    border-bottom-width: 0;
+    border-color: rgb(229 231 235);
+  }
+
+  pre[data-theme="light"],
+  pre[data-theme="dark"] {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-width: 1px;
+    border-color: rgb(229 231 235);
+  }
+
+  .dark figcaption[data-rehype-pretty-code-title] {
+    color: rgb(156 163 175);
+    background-color: rgb(31 41 55);
+    border-color: rgb(55 65 81);
+  }
+
+  .dark pre[data-theme="light"],
+  .dark pre[data-theme="dark"] {
+    border-color: rgb(55 65 81);
+  }
+}
+
+/* 主题色工具类 - 克制使用 */
+.theme-primary {
+  color: var(--theme-primary);
+}
+
+.theme-primary-bg {
+  background-color: var(--theme-primary);
+}
+
+.hover\:theme-primary:hover {
+  color: var(--theme-primary);
+}
+
+.dark .theme-primary {
+  color: var(--theme-primary-dark);
+}
+
+.dark .theme-primary-bg {
+  background-color: var(--theme-primary-dark);
+}
+
+.dark .hover\:theme-primary:hover {
+  color: var(--theme-primary-dark);
+}
+

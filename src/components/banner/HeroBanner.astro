@@ -1,0 +1,53 @@
+---
+import type { ImageMetadata } from 'astro';
+import BannerWallpaper from './BannerWallpaper.astro';
+import { siteConfig } from '@/config/site';
+
+// Glob 导入 src/assets/images/ 下的所有图片
+const imageFiles = import.meta.glob<ImageMetadata>(
+  '../../assets/images/*.{jpg,jpeg,png,webp,avif}',
+  { import: 'default' }
+);
+
+const imageName = siteConfig.home.banner.image;
+const imageLoader = imageFiles[`../../assets/images/${imageName}`];
+if (!imageLoader) {
+  throw new Error(`Banner image not found: ${imageName} (请在 src/assets/images/ 下放置)`);
+}
+const image = await imageLoader();
+
+interface Props {
+  /** 自定义标题 */
+  title?: string;
+  /** 自定义描述 */
+  description?: string;
+}
+
+const { title = siteConfig.name, description = siteConfig.description } = Astro.props;
+---
+
+<BannerWallpaper
+  image={image}
+  overlay={siteConfig.home.banner.overlay}
+  overlayOpacity={siteConfig.home.banner.overlayOpacity}
+  height={siteConfig.home.banner.height}
+>
+  <div class="h-full flex items-center justify-center">
+    <div class="text-center text-white px-4">
+      <!-- 头像 -->
+      <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-3xl font-bold border-2 border-white/30 shadow-lg">
+        {siteConfig.home.avatarText}
+      </div>
+
+      <!-- 标题 -->
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">
+        {title}
+      </h1>
+
+      <!-- 描述 -->
+      <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
+        {description}
+      </p>
+    </div>
+  </div>
+</BannerWallpaper>
