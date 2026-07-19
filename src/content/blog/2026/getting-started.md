@@ -6,6 +6,7 @@ category: 个人随笔
 tags: [博客, 公告]
 draft: false
 sticky: 10
+image: ../../../assets/images/blog-banner.jpg
 ---
 
 ## 你好，世界！
