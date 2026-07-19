@@ -6,14 +6,14 @@ import { onMounted } from 'vue';
 onMounted(() => {
   document.querySelectorAll('pre').forEach((block) => {
     if (block.querySelector('.copy-button')) return;
-    
-    let container = block;
+
+    let container: HTMLElement = block;
     const figure = block.closest('figure[data-rehype-pretty-code-figure]');
-    if (figure) {
+    if (figure instanceof HTMLElement) {
       container = figure;
     }
-    
-    (container as HTMLElement).style.position = 'relative';
+
+    container.style.position = 'relative';
     
     const button = document.createElement('button');
     button.className = 'copy-button absolute top-2 right-2 z-10 w-8 h-8 p-0 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer opacity-0 transition-opacity duration-200 flex items-center justify-center';

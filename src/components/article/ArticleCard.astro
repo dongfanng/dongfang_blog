@@ -1,5 +1,6 @@
 ---
 import type { BlogPost } from '@/utils/posts';
+import { getReadingTime } from '@/utils/posts';
 import { formatDate } from '@/utils/date';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, pubDate, category, tags, sticky } = post.data;
+const readingTime = getReadingTime(post.body);
 ---
 
 <article class="group">
@@ -23,12 +25,16 @@ const { title, description, pubDate, category, tags, sticky } = post.data;
           <span class="text-sm text-gray-500 dark:text-gray-400">
             {formatDate(pubDate)}
           </span>
+          <span class="text-sm text-gray-400 dark:text-gray-500">·</span>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            {readingTime} 分钟
+          </span>
         </div>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 shrink-0">
           {category}
         </span>
       </div>
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:theme-primary mb-2 transition-colors">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 mb-2 transition-colors">
         {title}
       </h2>
       <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">

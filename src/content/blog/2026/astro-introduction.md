@@ -10,17 +10,17 @@ sticky: 0
 
 ## 什么是 Astro？
 
-Astro 是一个现代化的静态站点生成器，专注于内容网站的性能。
+Astro 是一个现代化的静态站点生成器，专注于内容网站的性能。详见 [Astro 官网](https://astro.build)。
 
 ## 核心概念
 
 ### 群岛架构
 
-Astro 的核心理念是「群岛架构」：
+Astro 的核心理念是「群岛架构」，详见 [Astro Islands 文档](https://docs.astro.build/en/concepts/islands/)：
 
 1. 默认发送零 JavaScript
 2. 仅在需要时水化互动组件
-3. 支持多种 UI 框架
+3. 支持多种 UI 框架（如 [Vue](https://vuejs.org)、[React](https://react.dev)、[Svelte](https://svelte.dev)）
 
 ### 组件语法
 
@@ -54,3 +54,5 @@ const title = 'Hello, Astro!';
 ## 总结
 
 Astro 是一个非常优秀的静态站点生成器，特别适合内容网站。
+
+测试更新时间

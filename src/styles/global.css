@@ -1,15 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* v4 默认暗色变体基于 prefers-color-scheme，本项目用 class 切换，需显式声明 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* v4 CSS-first 配置：从 tailwind.config.mjs 迁移而来 */
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace';
+}
 
 @layer base {
-  :root {
-    --theme-primary: #3b82f6;
-    --theme-primary-dark: #60a5fa;
-  }
-
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
+
+  /* 强制经典滚动条,使 scrollbar-gutter: stable 在 macOS 上生效 */
+  html::-webkit-scrollbar {
+    width: 8px;
+  }
+  html::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  html::-webkit-scrollbar-thumb {
+    background-color: rgb(0 0 0 / 0.2);
+    border-radius: 4px;
+  }
+  .dark html::-webkit-scrollbar-thumb,
+  html.dark::-webkit-scrollbar-thumb {
+    background-color: rgb(255 255 255 / 0.2);
   }
 
   body {
@@ -62,11 +91,7 @@
   }
 
   .prose a {
-    color: var(--theme-primary);
-  }
-
-  .dark .prose a {
-    color: var(--theme-primary-dark);
+    @apply text-primary-500 dark:text-primary-400;
   }
 
   .prose a:hover {
@@ -87,7 +112,7 @@
 
   .prose blockquote {
     border-left-width: 4px;
-    border-left-color: var(--theme-primary);
+    border-left-color: var(--color-primary-500);
     padding-left: 1rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
@@ -138,7 +163,7 @@
 
   .dark .prose blockquote {
     color: rgb(209 213 219);
-    border-left-color: var(--theme-primary-dark);
+    border-left-color: var(--color-primary-400);
   }
 
   .dark .prose th {
@@ -153,12 +178,48 @@
   pre {
     position: relative;
     border-radius: 0.5rem;
-    padding: 1rem;
+    padding: 2.75rem 1rem 1rem 1rem;
     overflow-x: auto;
   }
 
   pre > code {
     display: grid;
+  }
+
+  /* 代码块语言标签 - 与复制按钮保持同一水平线 */
+  pre[data-language]:not([data-language=""])::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    height: 2rem;
+    padding: 0 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: rgb(100 116 139);
+    background-color: rgba(0, 0, 0, 0.04);
+    border-radius: 0.375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 1;
+    line-height: 1;
+  }
+
+  /* 带 figcaption(代码块标题) 时不显示语言标签,避免重复 */
+  figure:has(figcaption) pre[data-language]::before {
+    content: none;
+  }
+
+  .dark pre[data-language]:not([data-language=""])::before {
+    color: rgb(148 163 184);
+  }
+
+  /* 带 figcaption 时,语言标签本就不显示,恢复 padding */
+  figure:has(figcaption) pre {
+    padding-top: 1rem;
   }
 
   figure[data-rehype-pretty-code-figure] {
@@ -202,28 +263,46 @@
   }
 }
 
-/* 主题色工具类 - 克制使用 */
-.theme-primary {
-  color: var(--theme-primary);
+/* TOC 当前章节高亮 */
+.toc a {
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.theme-primary-bg {
-  background-color: var(--theme-primary);
+.toc a.toc-active {
+  color: var(--color-primary-500);
+  font-weight: 600;
+  border-left-color: var(--color-primary-500);
 }
 
-.hover\:theme-primary:hover {
-  color: var(--theme-primary);
+.dark .toc a.toc-active {
+  color: var(--color-primary-400);
+  border-left-color: var(--color-primary-400);
 }
 
-.dark .theme-primary {
-  color: var(--theme-primary-dark);
+/* 外链标识:自动给 target="_blank" 链接加 ↗ 图标 */
+.prose a[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.875em;
+  opacity: 0.6;
+  text-decoration: none;
+  display: inline-block;
 }
 
-.dark .theme-primary-bg {
-  background-color: var(--theme-primary-dark);
+/* 链接内含图片时不显示图标 */
+.prose a[target="_blank"]:has(img)::after {
+  content: none;
 }
 
-.dark .hover\:theme-primary:hover {
-  color: var(--theme-primary-dark);
+/* 复用容器 - 减少页面间重复，垂直 padding 由使用方按需添加 */
+@layer components {
+  .container-prose {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .container-wide {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
 }
 

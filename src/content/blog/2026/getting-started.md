@@ -16,10 +16,12 @@ sticky: 10
 
 这个博客使用了以下技术构建：
 
-- **Astro** - 现代化的静态站点生成器
-- **Tailwind CSS** - 实用优先的 CSS 框架
-- **TypeScript** - 类型安全的 JavaScript 超集
-- **MDX** - 支持组件的 Markdown
+- [Astro](https://astro.build) - 现代化的静态站点生成器
+- [Tailwind CSS](https://tailwindcss.com) - 实用优先的 CSS 框架
+- [TypeScript](https://www.typescriptlang.org) - 类型安全的 JavaScript 超集
+- [MDX](https://mdxjs.com) - 支持组件的 Markdown
+
+更多关于 Astro 的内容可以参考 [Astro 官方文档](https://docs.astro.build) 或 [Astro GitHub 仓库](https://github.com/withastro/astro)。
 
 ```typescript
 // 示例代码
@@ -58,3 +60,5 @@ console.log(hello('World'));
 ## 总结
 
 希望这个博客能够成为我记录学习和分享想法的地方。感谢你的阅读！
+
+![示例图片](https://cdn.jsdelivr.net/gh/dongfang2142/img_for_picGo@main/img/20260425114818724.png)

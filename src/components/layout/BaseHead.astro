@@ -1,6 +1,7 @@
 ---
 import type { SEOProps } from '@/utils/seo';
 import { buildTitle, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/utils/seo';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props extends SEOProps {}
 
@@ -56,4 +57,5 @@ const pageImage = image ? `${SITE_URL}${image}` : undefined;
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml">
+  <ViewTransitions />
 </head>

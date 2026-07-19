@@ -3,6 +3,23 @@ import type { CollectionEntry } from 'astro:content';
 export type BlogPost = CollectionEntry<'blog'>;
 
 /**
+ * 统计正文字数（去除代码块、行内代码与空白字符）
+ */
+export function getWordCount(body: string): number {
+  const text = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+  return text.replace(/\s/g, '').length;
+}
+
+/**
+ * 估算阅读时间(分钟)
+ * 移除代码块后按 ~400 字/分钟计算
+ */
+export function getReadingTime(body: string): number {
+  const charCount = getWordCount(body);
+  return Math.max(1, Math.ceil(charCount / 400));
+}
+
+/**
  * 排序文章：置顶优先（sticky 越大越靠前），然后按日期降序
  */
 export function sortPosts(posts: BlogPost[]): BlogPost[] {
@@ -40,49 +57,6 @@ export function getTags(posts: BlogPost[]): string[] {
     }
   });
   return Array.from(tags).sort();
-}
-
-/**
- * 按分类分组文章
- */
-export function groupPostsByCategory(posts: BlogPost[]): Map<string, BlogPost[]> {
-  const grouped = new Map<string, BlogPost[]>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      const category = post.data.category;
-      if (!grouped.has(category)) {
-        grouped.set(category, []);
-      }
-      grouped.get(category)!.push(post);
-    }
-  });
-  // 对每个分类的文章进行排序
-  grouped.forEach((categoryPosts) => {
-    categoryPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-  });
-  return grouped;
-}
-
-/**
- * 按标签分组文章
- */
-export function groupPostsByTag(posts: BlogPost[]): Map<string, BlogPost[]> {
-  const grouped = new Map<string, BlogPost[]>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      post.data.tags.forEach((tag) => {
-        if (!grouped.has(tag)) {
-          grouped.set(tag, []);
-        }
-        grouped.get(tag)!.push(post);
-      });
-    }
-  });
-  // 对每个标签的文章进行排序
-  grouped.forEach((tagPosts) => {
-    tagPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-  });
-  return grouped;
 }
 
 /**

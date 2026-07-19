@@ -40,7 +40,7 @@ function createRipple(e: MouseEvent) {
 }
 
 function getRippleStyle(ripple: Ripple) {
-  const themePrimary = getComputedStyle(document.documentElement).getPropertyValue('--theme-primary').trim() || '#3b82f6';
+  const themePrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-500').trim() || '#3b82f6';
   return {
     left: `${ripple.x}px`,
     top: `${ripple.y}px`,

@@ -182,7 +182,7 @@ onMounted(() => {
 <style>
 mark {
   background: transparent;
-  color: var(--primary-color, #3b82f6);
+  color: var(--color-primary-500);
   font-weight: 600;
   padding: 0 0.1em;
 }
