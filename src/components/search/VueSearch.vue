@@ -68,7 +68,7 @@
         <div v-if="isSearching" class="block rounded-xl text-lg px-3 py-2 text-black/50 dark:text-white/50">
           正在搜索...
         </div>
-        <div v-else-if="results.length > 0">
+        <div v-else-if="results.length > 0" class="flex flex-col gap-1">
           <a
             v-for="item in results.slice(0, 5)"
             :key="item.url"

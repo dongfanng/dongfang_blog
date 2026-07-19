@@ -33,7 +33,7 @@
       <div v-if="isSearching" class="flex justify-center py-10">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
-      <div v-else-if="results.length > 0">
+      <div v-else-if="results.length > 0" class="flex flex-col gap-3">
         <div
           v-for="result in results"
           :key="result.id"
