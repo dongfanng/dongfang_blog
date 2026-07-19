@@ -18,14 +18,16 @@ interface Props {
   prev?: BlogPost | null;
   next?: BlogPost | null;
   related?: BlogPost[];
+  lastModified?: string;
 }
 
-const { post, headings = [], prev, next, related } = Astro.props;
-const { title, description, pubDate, updatedDate, category, tags, image } = post.data;
+const { post, headings = [], prev, next, related, lastModified } = Astro.props;
+const { title, description, pubDate, category, tags, image } = post.data;
+const updatedDate = post.data.updatedDate || (lastModified ? new Date(lastModified) : null);
 const readingTime = getReadingTime(post.body);
 ---
 
-<BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate} category={category} tags={tags}>
+<BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
   <VueReadingProgress client:visible />
   <VueCodeCopy client:load />
   <VueLightbox client:idle />

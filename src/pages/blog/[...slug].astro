@@ -16,9 +16,10 @@ const posts = await getCollection('blog');
 const sortedPosts = sortPosts(posts);
 const { prev, next } = getPrevNextPosts(post, sortedPosts);
 const related = getRelatedPosts(post, posts);
-const { Content, headings } = await post.render();
+const { Content, headings, remarkPluginFrontmatter } = await post.render();
+const lastModified = remarkPluginFrontmatter.lastModified as string | undefined;
 ---
 
-<PostLayout {post} {prev} {next} {related} {headings}>
+<PostLayout {post} {prev} {next} {related} {headings} lastModified={lastModified}>
   <Content />
 </PostLayout>

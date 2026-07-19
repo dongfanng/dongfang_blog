@@ -6,7 +6,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeExternalLinks from 'rehype-external-links';
 import icon from 'astro-icon';
 import tailwindcss from '@tailwindcss/vite';
-import { remarkGitUpdatedDate } from './src/plugins/remark-git-updated-date';
+import { remarkLastModified } from './src/plugins/remark-last-modified';
 import { siteConfig } from './src/config/site';
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -27,7 +27,7 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
-    remarkPlugins: [remarkGitUpdatedDate],
+    remarkPlugins: [remarkLastModified],
     rehypePlugins: [
       [rehypeExternalLinks, {
         target: '_blank',
