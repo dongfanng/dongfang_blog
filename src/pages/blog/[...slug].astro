@@ -16,9 +16,7 @@ const posts = await getCollection('blog');
 const sortedPosts = sortPosts(posts);
 const { prev, next } = getPrevNextPosts(post, sortedPosts);
 const related = getRelatedPosts(post, posts);
-const { Content } = await post.render();
-
-const headings: { depth: number; text: string; slug: string }[] = [];
+const { Content, headings } = await post.render();
 ---
 
 <PostLayout {post} {prev} {next} {related} {headings}>
