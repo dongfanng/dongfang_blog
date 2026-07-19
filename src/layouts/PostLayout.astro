@@ -5,6 +5,7 @@ import TableOfContents from '@/components/article/TableOfContents.astro';
 import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
 import VueBackToTop from '@/components/ui/VueBackToTop.vue';
 import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
+import VueLightbox from '@/components/article/VueLightbox.vue';
 import type { BlogPost } from '@/utils/posts';
 import { getReadingTime } from '@/utils/posts';
 
@@ -24,6 +25,7 @@ const readingTime = getReadingTime(post.body);
 <BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate} category={category} tags={tags}>
   <VueReadingProgress client:visible />
   <VueCodeCopy client:load />
+  <VueLightbox client:load />
   <article class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
