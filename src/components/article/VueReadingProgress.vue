@@ -1,7 +1,7 @@
 <template>
   <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
     <div
-      class="h-full transition-none theme-primary-bg"
+      class="h-full transition-none bg-primary-500 dark:bg-primary-400"
       :style="{ width: progress + '%' }"
     ></div>
   </div>

@@ -29,7 +29,7 @@ const readingTime = getReadingTime(post.body);
   <VueLightbox client:idle />
   <VueTocHighlight client:idle />
 
-  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8">
+  <div class="container-wide py-8">
     <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-8">
       <article class="min-w-0 max-w-4xl">
     <header class="mb-8">
@@ -78,7 +78,7 @@ const readingTime = getReadingTime(post.body);
           {prev && (
             <a href={`/blog/${prev.slug}`} class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">← 上一篇</div>
-              <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors">
+              <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
                 {prev.data.title}
               </div>
             </a>
@@ -86,7 +86,7 @@ const readingTime = getReadingTime(post.body);
           {next && (
             <a href={`/blog/${next.slug}`} class={`group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors text-right ${prev ? '' : 'md:col-start-2'}`}>
               <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">下一篇 &gt;</div>
-              <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors">
+              <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
                 {next.data.title}
               </div>
             </a>
@@ -104,7 +104,7 @@ const readingTime = getReadingTime(post.body);
               href={`/blog/${p.slug}`}
               class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
             >
-              <div class="font-medium text-gray-900 dark:text-white group-hover:theme-primary transition-colors line-clamp-2">
+              <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                 {p.data.title}
               </div>
               <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">

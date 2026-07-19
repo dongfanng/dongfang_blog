@@ -328,12 +328,12 @@ onUnmounted(() => {
 <style>
 mark {
   background: transparent;
-  color: var(--theme-primary, #3b82f6);
+  color: var(--color-primary-500);
   font-weight: 600;
   padding: 0 0.1em;
 }
 .dark mark {
-  color: var(--theme-primary-dark, #60a5fa);
+  color: var(--color-primary-400);
 }
 
 .search-panel {

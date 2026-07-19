@@ -1,13 +1,25 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* v4 默认暗色变体基于 prefers-color-scheme，本项目用 class 切换，需显式声明 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* v4 CSS-first 配置：从 tailwind.config.mjs 迁移而来 */
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace';
+}
 
 @layer base {
-  :root {
-    --theme-primary: #3b82f6;
-    --theme-primary-dark: #60a5fa;
-  }
-
   html {
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
@@ -79,11 +91,7 @@
   }
 
   .prose a {
-    color: var(--theme-primary);
-  }
-
-  .dark .prose a {
-    color: var(--theme-primary-dark);
+    @apply text-primary-500 dark:text-primary-400;
   }
 
   .prose a:hover {
@@ -104,7 +112,7 @@
 
   .prose blockquote {
     border-left-width: 4px;
-    border-left-color: var(--theme-primary);
+    border-left-color: var(--color-primary-500);
     padding-left: 1rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
@@ -155,7 +163,7 @@
 
   .dark .prose blockquote {
     color: rgb(209 213 219);
-    border-left-color: var(--theme-primary-dark);
+    border-left-color: var(--color-primary-400);
   }
 
   .dark .prose th {
@@ -256,31 +264,6 @@
   }
 }
 
-/* 主题色工具类 - 克制使用 */
-.theme-primary {
-  color: var(--theme-primary);
-}
-
-.theme-primary-bg {
-  background-color: var(--theme-primary);
-}
-
-.hover\:theme-primary:hover {
-  color: var(--theme-primary);
-}
-
-.dark .theme-primary {
-  color: var(--theme-primary-dark);
-}
-
-.dark .theme-primary-bg {
-  background-color: var(--theme-primary-dark);
-}
-
-.dark .hover\:theme-primary:hover {
-  color: var(--theme-primary-dark);
-}
-
 /* TOC 当前章节高亮 */
 .toc a {
   border-left: 2px solid transparent;
@@ -290,14 +273,14 @@
 }
 
 .toc a.toc-active {
-  color: var(--theme-primary);
+  color: var(--color-primary-500);
   font-weight: 600;
-  border-left-color: var(--theme-primary);
+  border-left-color: var(--color-primary-500);
 }
 
 .dark .toc a.toc-active {
-  color: var(--theme-primary-dark);
-  border-left-color: var(--theme-primary-dark);
+  color: var(--color-primary-400);
+  border-left-color: var(--color-primary-400);
 }
 
 /* 外链标识:自动给 target="_blank" 链接加 ↗ 图标 */
@@ -312,5 +295,15 @@
 /* 链接内含图片时不显示图标 */
 .prose a[target="_blank"]:has(img)::after {
   content: none;
+}
+
+/* 复用容器 - 减少页面间重复，垂直 padding 由使用方按需添加 */
+@layer components {
+  .container-prose {
+    @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .container-wide {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
 }
 

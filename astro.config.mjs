@@ -1,11 +1,11 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import tailwind from '@astrojs/tailwind';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeExternalLinks from 'rehype-external-links';
 import icon from 'astro-icon';
+import tailwindcss from '@tailwindcss/vite';
 import { siteConfig } from './src/config/site';
 
 /** @type {import('rehype-pretty-code').Options} */
@@ -21,9 +21,6 @@ export default defineConfig({
   site: siteConfig.url,
   integrations: [
     mdx(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
     vue(),
     icon(),
     sitemap(),
@@ -39,6 +36,7 @@ export default defineConfig({
     ],
   },
   vite: {
+    plugins: [tailwindcss()],
     build: {
       rollupOptions: {
         external: ['/pagefind/pagefind.js'],

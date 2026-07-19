@@ -2,7 +2,7 @@
   <button
     v-show="isVisible"
     @click="scrollToTop"
-    class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:opacity-80 transition-all duration-200 text-white theme-primary-bg"
+    class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:opacity-80 transition-all duration-200 text-white bg-primary-500 dark:bg-primary-400"
     aria-label="回到顶部"
   >
     <VueIcon icon="lucide:arrow-up" />

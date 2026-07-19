@@ -13,7 +13,7 @@ const asciiArt = `
 `;
 
 onMounted(() => {
-  const themePrimary = getComputedStyle(document.documentElement).getPropertyValue('--theme-primary').trim() || '#3b82f6';
+  const themePrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-500').trim() || '#3b82f6';
   console.log('%c' + asciiArt, `color: ${themePrimary}; font-family: monospace; font-size: 12px;`);
   console.log('%c发现你打开了控制台，真不错！', 'color: #10b981; font-size: 14px; font-weight: bold;');
   console.log('%c既然来了，随便看看代码吧～', 'color: #6b7280;');
