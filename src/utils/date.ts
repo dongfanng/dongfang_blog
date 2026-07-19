@@ -26,19 +26,3 @@ export function formatDateTime(date: Date | string): string {
   const pad = (n: number) => n.toString().padStart(2, '0');
   return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
-
-/**
- * 格式化日期为 ISO 格式（用于 RSS 等）
- */
-export function formatDateISO(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toISOString();
-}
-
-/**
- * 获取年份
- */
-export function getYear(date: Date | string): number {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.getFullYear();
-}

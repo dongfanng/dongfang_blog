@@ -53,49 +53,6 @@ export function getTags(posts: BlogPost[]): string[] {
 }
 
 /**
- * 按分类分组文章
- */
-export function groupPostsByCategory(posts: BlogPost[]): Map<string, BlogPost[]> {
-  const grouped = new Map<string, BlogPost[]>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      const category = post.data.category;
-      if (!grouped.has(category)) {
-        grouped.set(category, []);
-      }
-      grouped.get(category)!.push(post);
-    }
-  });
-  // 对每个分类的文章进行排序
-  grouped.forEach((categoryPosts) => {
-    categoryPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-  });
-  return grouped;
-}
-
-/**
- * 按标签分组文章
- */
-export function groupPostsByTag(posts: BlogPost[]): Map<string, BlogPost[]> {
-  const grouped = new Map<string, BlogPost[]>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      post.data.tags.forEach((tag) => {
-        if (!grouped.has(tag)) {
-          grouped.set(tag, []);
-        }
-        grouped.get(tag)!.push(post);
-      });
-    }
-  });
-  // 对每个标签的文章进行排序
-  grouped.forEach((tagPosts) => {
-    tagPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-  });
-  return grouped;
-}
-
-/**
  * 按年份分组文章（用于归档）
  */
 export function groupPostsByYear(posts: BlogPost[]): Map<number, BlogPost[]> {

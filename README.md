@@ -26,7 +26,6 @@
 - ✅ 上一篇/下一篇导航
 - ✅ RSS Feed 订阅
 - 📝 目录导航（预留接口）
-- 📝 Giscus 评论系统（预留接口）
 
 ## 开发
 
@@ -43,13 +42,6 @@ npm run build
 # 预览构建结果
 npm run preview
 ```
-
-## 配置 Giscus 评论系统
-
-1. 在 GitHub 上创建一个仓库并启用 Discussions
-2. 访问 [Giscus 官网](https://giscus.app) 进行配置
-3. 获取 repo、repoId、category、categoryId 参数
-4. 在 `src/layouts/PostLayout.astro` 中取消注释并填入参数
 
 ## 部署
 
@@ -80,9 +72,8 @@ npm run build
 │   │   ├── ArticleCard.astro # 文章卡片
 │   │   ├── ThemeToggle.astro # 主题切换按钮
 │   │   ├── TableOfContents.astro # 目录导航
-│   │   ├── ReadingProgress.astro # 阅读进度条
-│   │   ├── BackToTop.astro   # 回到顶部按钮
-│   │   └── Comments.astro   # 评论组件
+│   │   ├── VueReadingProgress.vue # 阅读进度条
+│   │   └── BackToTop.astro   # 回到顶部按钮
 │   ├── content/             # 内容（文章）
 │   │   ├── blog/            # 博客文章
 │   │   │   └── 2026/       # 按年份组织
