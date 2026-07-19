@@ -6,9 +6,10 @@ import { Image } from 'astro:assets';
 
 interface Props {
   post: BlogPost;
+  priority?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, priority = false } = Astro.props;
 const { title, description, pubDate, category, tags, sticky, image } = post.data;
 const readingTime = getReadingTime(post.body);
 ---
@@ -58,7 +59,8 @@ const readingTime = getReadingTime(post.body);
                 src={image}
                 alt={title}
                 class="w-full aspect-video md:h-full object-cover rounded-lg"
-                loading="lazy"
+                loading={priority ? 'eager' : 'lazy'}
+                fetchpriority={priority ? 'high' : 'auto'}
               />
             ) : (
               <Image
@@ -67,6 +69,8 @@ const readingTime = getReadingTime(post.body);
                 class="w-full aspect-video md:h-full object-cover rounded-lg"
                 widths={[240, 360]}
                 sizes="240px"
+                loading={priority ? 'eager' : 'lazy'}
+                fetchpriority={priority ? 'high' : 'auto'}
               />
             )}
           </div>

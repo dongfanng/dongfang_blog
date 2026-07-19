@@ -28,8 +28,8 @@ const tags = getTags(posts);
         </a>
       </div>
       <div class="grid gap-6">
-        {recentPosts.map((post) => (
-          <ArticleCard post={post} />
+        {recentPosts.map((post, index) => (
+          <ArticleCard post={post} priority={index === 0} />
         ))}
       </div>
     </section>
