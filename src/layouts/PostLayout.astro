@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import { formatDate, formatDateTime } from '@/utils/date';
 import { siteConfig } from '@/config/site';
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
 import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
 import VueBackToTop from '@/components/ui/VueBackToTop.vue';
@@ -28,7 +29,7 @@ const readingTime = getReadingTime(post.body);
 const wordCount = getWordCount(post.body);
 ---
 
-<BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
+<BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
   <VueReadingProgress client:visible />
   <VueCodeCopy client:load />
   <VueLightbox client:idle />
@@ -70,6 +71,25 @@ const wordCount = getWordCount(post.body);
         ))}
       </div>
     </header>
+
+    {image && (
+      typeof image === 'string' ? (
+        <img
+          src={image}
+          alt={title}
+          class="w-full aspect-[16/9] object-cover rounded-2xl mb-8"
+          loading="lazy"
+        />
+      ) : (
+        <Image
+          src={image}
+          alt={title}
+          class="w-full aspect-[16/9] object-cover rounded-2xl mb-8"
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      )
+    )}
 
     <div class="prose dark:prose-invert max-w-none">
       <slot />
