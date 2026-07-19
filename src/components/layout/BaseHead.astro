@@ -57,5 +57,6 @@ const pageImage = image ? `${SITE_URL}${image}` : undefined;
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml">
+  {import.meta.env.PROD && <link rel="modulepreload" href="/pagefind/pagefind.js" />}
   <ViewTransitions />
 </head>
