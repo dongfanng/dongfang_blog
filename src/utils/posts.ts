@@ -3,6 +3,16 @@ import type { CollectionEntry } from 'astro:content';
 export type BlogPost = CollectionEntry<'blog'>;
 
 /**
+ * 估算阅读时间(分钟)
+ * 移除代码块后按 ~400 字/分钟计算
+ */
+export function getReadingTime(body: string): number {
+  const text = body.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');
+  const charCount = text.replace(/\s/g, '').length;
+  return Math.max(1, Math.ceil(charCount / 400));
+}
+
+/**
  * 排序文章：置顶优先（sticky 越大越靠前），然后按日期降序
  */
 export function sortPosts(posts: BlogPost[]): BlogPost[] {

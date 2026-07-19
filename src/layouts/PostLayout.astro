@@ -6,6 +6,7 @@ import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
 import VueBackToTop from '@/components/ui/VueBackToTop.vue';
 import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
 import type { BlogPost } from '@/utils/posts';
+import { getReadingTime } from '@/utils/posts';
 
 interface Props {
   post: BlogPost;
@@ -17,6 +18,7 @@ interface Props {
 
 const { post, headings = [], prev, next, related } = Astro.props;
 const { title, description, pubDate, updatedDate, category, tags, image } = post.data;
+const readingTime = getReadingTime(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={image} pubDate={pubDate} updatedDate={updatedDate} category={category} tags={tags}>
@@ -31,6 +33,10 @@ const { title, description, pubDate, updatedDate, category, tags, image } = post
         <time class="text-sm text-gray-500 dark:text-gray-400">
           发布于 {formatDate(pubDate)}
         </time>
+        <span class="text-sm text-gray-400 dark:text-gray-500">·</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">
+          约 {readingTime} 分钟阅读
+        </span>
         {updatedDate && (
           <time class="text-sm text-gray-500 dark:text-gray-400">
             · 更新于 {formatDate(updatedDate)}
