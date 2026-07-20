@@ -202,7 +202,7 @@
   }
 
   /*
-   * 语言标签挂在不滚动的包裹层（由 VueCodeCopy 写入 data-code-language），
+   * 语言标签挂在不滚动的包裹层（由文章增强脚本写入 data-code-language），
    * 避免放在 pre 内 absolute 时随横向滚动条移动。
    */
   .code-block-wrapper[data-code-language]:not([data-code-language=""])::before {

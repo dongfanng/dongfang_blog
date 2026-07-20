@@ -1,6 +1,11 @@
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type BlogPost = CollectionEntry<'blog'>;
+
+/** 已发布文章（统一过滤 draft，草稿不会出现在列表/归档/静态路径中） */
+export async function getPublishedPosts() {
+  return getCollection('blog', ({ data }) => !data.draft);
+}
 
 /**
  * 统计正文字数（去除代码块、行内代码与空白字符）
@@ -23,26 +28,19 @@ export function getReadingTime(body: string): number {
  * 排序文章：置顶优先（sticky 越大越靠前），然后按日期降序
  */
 export function sortPosts(posts: BlogPost[]): BlogPost[] {
-  return posts
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => {
-      if (a.data.sticky !== b.data.sticky) {
-        return b.data.sticky - a.data.sticky;
-      }
-      return b.data.pubDate.getTime() - a.data.pubDate.getTime();
-    });
+  return [...posts].sort((a, b) => {
+    if (a.data.sticky !== b.data.sticky) {
+      return b.data.sticky - a.data.sticky;
+    }
+    return b.data.pubDate.getTime() - a.data.pubDate.getTime();
+  });
 }
 
 /**
  * 获取所有分类
  */
 export function getCategories(posts: BlogPost[]): string[] {
-  const categories = new Set<string>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      categories.add(post.data.category);
-    }
-  });
+  const categories = new Set(posts.map((post) => post.data.category));
   return Array.from(categories).sort();
 }
 
@@ -50,12 +48,7 @@ export function getCategories(posts: BlogPost[]): string[] {
  * 获取所有标签
  */
 export function getTags(posts: BlogPost[]): string[] {
-  const tags = new Set<string>();
-  posts.forEach((post) => {
-    if (!post.data.draft) {
-      post.data.tags.forEach((tag) => tags.add(tag));
-    }
-  });
+  const tags = new Set(posts.flatMap((post) => post.data.tags));
   return Array.from(tags).sort();
 }
 
@@ -65,19 +58,15 @@ export function getTags(posts: BlogPost[]): string[] {
 export function groupPostsByYear(posts: BlogPost[]): Map<number, BlogPost[]> {
   const grouped = new Map<number, BlogPost[]>();
   posts.forEach((post) => {
-    if (!post.data.draft) {
-      const year = post.data.pubDate.getFullYear();
-      if (!grouped.has(year)) {
-        grouped.set(year, []);
-      }
-      grouped.get(year)!.push(post);
+    const year = post.data.pubDate.getFullYear();
+    if (!grouped.has(year)) {
+      grouped.set(year, []);
     }
+    grouped.get(year)!.push(post);
   });
-  // 对每年的文章进行排序（降序）
   grouped.forEach((yearPosts) => {
     yearPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
   });
-  // 按年份降序排列
   return new Map([...grouped.entries()].sort(([a], [b]) => b - a));
 }
 
@@ -93,17 +82,13 @@ export function getRelatedPosts(
 
   return allPosts
     .filter((post) => {
-      if (post.slug === currentPost.slug || post.data.draft) return false;
-      // 计算共同标签数量
-      const commonTags = post.data.tags.filter((tag) => currentTags.has(tag));
-      return commonTags.length > 0;
+      if (post.slug === currentPost.slug) return false;
+      return post.data.tags.some((tag) => currentTags.has(tag));
     })
     .sort((a, b) => {
-      // 按共同标签数量排序
       const aCommon = a.data.tags.filter((tag) => currentTags.has(tag)).length;
       const bCommon = b.data.tags.filter((tag) => currentTags.has(tag)).length;
       if (aCommon !== bCommon) return bCommon - aCommon;
-      // 标签数量相同时按日期排序
       return b.data.pubDate.getTime() - a.data.pubDate.getTime();
     })
     .slice(0, maxCount);

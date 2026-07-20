@@ -1,11 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ArticleCard from '@/components/article/ArticleCard.astro';
-import { sortPosts, getCategories } from '@/utils/posts';
+import { getPublishedPosts, sortPosts, getCategories } from '@/utils/posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getPublishedPosts();
   const categories = getCategories(posts);
   return categories.map((category) => ({
     params: { category },
@@ -13,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params;
-const posts = await getCollection('blog');
+const posts = await getPublishedPosts();
 const categoryPosts = sortPosts(posts.filter((p) => p.data.category === category));
 ---
 
@@ -26,7 +25,9 @@ const categoryPosts = sortPosts(posts.filter((p) => p.data.category === category
       <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
         分类: {category}
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">共 {categoryPosts.length} 篇文章</p>
+      <p class="text-gray-600 dark:text-gray-400">
+        共 {categoryPosts.length} 篇文章
+      </p>
     </header>
 
     <div class="grid gap-6">

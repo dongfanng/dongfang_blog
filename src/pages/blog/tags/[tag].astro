@@ -1,11 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ArticleCard from '@/components/article/ArticleCard.astro';
-import { sortPosts, getTags } from '@/utils/posts';
+import { getPublishedPosts, sortPosts, getTags } from '@/utils/posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getPublishedPosts();
   const tags = getTags(posts);
   return tags.map((tag) => ({
     params: { tag },
@@ -13,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { tag } = Astro.params;
-const posts = await getCollection('blog');
+const posts = await getPublishedPosts();
 const tagPosts = sortPosts(posts.filter((p) => p.data.tags.includes(tag!)));
 ---
 
@@ -26,7 +25,9 @@ const tagPosts = sortPosts(posts.filter((p) => p.data.tags.includes(tag!)));
       <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
         标签: #{tag}
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">共 {tagPosts.length} 篇文章</p>
+      <p class="text-gray-600 dark:text-gray-400">
+        共 {tagPosts.length} 篇文章
+      </p>
     </header>
 
     <div class="grid gap-6">

@@ -5,11 +5,7 @@ import { siteConfig } from '@/config/site';
 import Icon from '@/components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
-import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
-import VueBackToTop from '@/components/ui/VueBackToTop.vue';
-import VueCodeCopy from '@/components/article/VueCodeCopy.vue';
-import VueLightbox from '@/components/article/VueLightbox.vue';
-import VueTocHighlight from '@/components/article/VueTocHighlight.vue';
+import VuePostEnhancements from '@/components/article/VuePostEnhancements.vue';
 import type { BlogPost } from '@/utils/posts';
 import { getReadingTime, getWordCount } from '@/utils/posts';
 
@@ -30,10 +26,7 @@ const wordCount = getWordCount(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
-  <VueReadingProgress client:visible />
-  <VueCodeCopy client:load />
-  <VueLightbox client:idle />
-  <VueTocHighlight client:idle />
+  <VuePostEnhancements client:load />
 
   <div class="container-prose py-8">
     <article>
@@ -165,5 +158,4 @@ const wordCount = getWordCount(post.body);
     </aside>
   )}
 
-  <VueBackToTop client:idle />
 </BaseLayout>
