@@ -175,20 +175,38 @@
     border-color: rgb(75 85 99);
   }
 
+  /* 包裹层不滚动，复制按钮固定在其上；横向滚动只发生在 pre 内 */
+  .code-block-wrapper,
+  figure[data-rehype-pretty-code-figure] {
+    position: relative;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  figure[data-rehype-pretty-code-figure] {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   pre {
     position: relative;
     border-radius: 0.5rem;
     padding: 2.75rem 1rem 1rem 1rem;
     overflow-x: auto;
+    max-width: 100%;
+    min-width: 0;
   }
 
   pre > code {
     display: grid;
   }
 
-  /* 代码块语言标签 - 与复制按钮保持同一水平线 */
-  pre[data-language]:not([data-language=""])::before {
-    content: attr(data-language);
+  /*
+   * 语言标签挂在不滚动的包裹层（由 VueCodeCopy 写入 data-code-language），
+   * 避免放在 pre 内 absolute 时随横向滚动条移动。
+   */
+  .code-block-wrapper[data-code-language]:not([data-code-language=""])::before {
+    content: attr(data-code-language);
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
@@ -208,23 +226,13 @@
     line-height: 1;
   }
 
-  /* 带 figcaption(代码块标题) 时不显示语言标签,避免重复 */
-  figure:has(figcaption) pre[data-language]::before {
-    content: none;
-  }
-
-  .dark pre[data-language]:not([data-language=""])::before {
+  .dark .code-block-wrapper[data-code-language]:not([data-code-language=""])::before {
     color: rgb(148 163 184);
   }
 
-  /* 带 figcaption 时,语言标签本就不显示,恢复 padding */
+  /* 带 figcaption 时不显示语言标签，并恢复 pre 顶部 padding */
   figure:has(figcaption) pre {
     padding-top: 1rem;
-  }
-
-  figure[data-rehype-pretty-code-figure] {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   figcaption[data-rehype-pretty-code-title] {
