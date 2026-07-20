@@ -35,9 +35,6 @@
 | 归档 | `src/pages/archive.astro` | `container-prose` | `py-12` |
 | 关于 | `src/pages/about.astro` | `container-prose` | `py-12` |
 | 文章页 | `src/layouts/PostLayout.astro` | `container-prose` | `py-8` |
-| 搜索页 | `src/pages/search.astro` | 非标准（见下方说明） | `py-8` |
-
-**搜索页例外**：`search.astro` 用的是 `max-w-4xl mx-auto px-4 py-8 min-h-[80vh]`，缺少 `sm:px-6 lg:px-8`，与标准容器不一致。如需统一，可改为 `container-prose py-8 min-h-[80vh]`。
 
 ## 3. 文章页 TOC 布局
 

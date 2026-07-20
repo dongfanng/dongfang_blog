@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import { sortPosts } from '@/utils/posts';
-import { SITE_TITLE, SITE_DESCRIPTION } from '@/utils/seo';
+import { siteConfig } from '@/config/site';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
@@ -9,8 +9,8 @@ export async function GET(context: APIContext) {
   const sortedPosts = sortPosts(posts);
 
   return rss({
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
+    title: siteConfig.name,
+    description: siteConfig.description,
     site: context.site ?? '',
     items: sortedPosts.map((post) => ({
       title: post.data.title,

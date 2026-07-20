@@ -2,7 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import { formatDate, formatDateTime } from '@/utils/date';
 import { siteConfig } from '@/config/site';
-import { Icon } from 'astro-icon/components';
+import Icon from '@/components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
 import VueReadingProgress from '@/components/article/VueReadingProgress.vue';
@@ -19,12 +19,12 @@ interface Props {
   prev?: BlogPost | null;
   next?: BlogPost | null;
   related?: BlogPost[];
-  lastModified?: string;
+  /** 最后更新时间：frontmatter.updatedDate 或 git 提交时间 */
+  updatedDate?: Date | null;
 }
 
-const { post, headings = [], prev, next, related, lastModified } = Astro.props;
+const { post, headings = [], prev, next, related, updatedDate = null } = Astro.props;
 const { title, description, pubDate, category, tags, image } = post.data;
-const updatedDate = post.data.updatedDate || (lastModified ? new Date(lastModified) : null);
 const readingTime = getReadingTime(post.body);
 const wordCount = getWordCount(post.body);
 ---

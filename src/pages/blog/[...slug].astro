@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import PostLayout from '@/layouts/PostLayout.astro';
 import { sortPosts, getPrevNextPosts, getRelatedPosts } from '@/utils/posts';
+import { getGitLastModified } from '@/utils/last-modified';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -16,10 +17,12 @@ const posts = await getCollection('blog');
 const sortedPosts = sortPosts(posts);
 const { prev, next } = getPrevNextPosts(post, sortedPosts);
 const related = getRelatedPosts(post, posts);
-const { Content, headings, remarkPluginFrontmatter } = await post.render();
-const lastModified = remarkPluginFrontmatter.lastModified as string | undefined;
+const { Content, headings } = await post.render();
+
+// 手动 updatedDate 优先，否则用 git 最后提交时间
+const updatedDate = post.data.updatedDate ?? getGitLastModified(post.id);
 ---
 
-<PostLayout {post} {prev} {next} {related} {headings} lastModified={lastModified}>
+<PostLayout {post} {prev} {next} {related} {headings} {updatedDate}>
   <Content />
 </PostLayout>

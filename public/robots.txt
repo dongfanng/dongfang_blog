@@ -1,8 +1,5 @@
 User-agent: *
 Allow: /
 
-# 禁止索引搜索结果页(避免重复内容)
-Disallow: /search
-
 # 站点地图
 Sitemap: https://dongfang-blog.pages.dev/sitemap-index.xml

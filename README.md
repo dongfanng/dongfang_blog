@@ -7,12 +7,11 @@
 - [Astro](https://astro.build) - 静态站点生成器
 - [Tailwind CSS](https://tailwindcss.com) - CSS 框架
 - [TypeScript](https://www.typescriptlang.org) - 类型安全
-- [MDX](https://mdxjs.com) - 支持组件的 Markdown
 - [rehype-pretty-code](https://rehype-pretty-code.netlify.app) - 代码高亮
 
 ## 功能特性
 
-- ✅ Markdown/MDX 文章渲染
+- ✅ Markdown 文章渲染
 - ✅ 文章分类与标签
 - ✅ 文章归档（按年份）
 - ✅ 置顶文章
@@ -95,8 +94,9 @@ npm run build
 │   │   └── global.css       # 全局样式
 │   └── utils/               # 工具函数
 │       ├── date.ts          # 日期处理
+│       ├── last-modified.ts # git 最后修改时间
 │       ├── posts.ts         # 文章处理
-│       └── seo.ts           # SEO 相关
+│       └── seo.ts           # SEO（基于 siteConfig）
 ├── astro.config.mjs         # Astro 配置
 ├── tailwind.config.mjs      # Tailwind 配置
 ├── tsconfig.json            # TypeScript 配置

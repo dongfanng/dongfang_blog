@@ -1,0 +1,29 @@
+---
+/**
+ * 服务端内联 Lucide 图标（来自 @iconify-json/lucide，无需客户端 JS）
+ */
+import { icons as lucideIcons } from '@iconify-json/lucide';
+
+interface Props {
+  /** 图标名，支持 `rss` 或 `lucide:rss` */
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = '' } = Astro.props;
+const iconName = name.replace(/^lucide:/, '');
+const data = lucideIcons.icons[iconName as keyof typeof lucideIcons.icons];
+const size = lucideIcons.width ?? 24;
+---
+
+{data && (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class={className}
+    width="1em"
+    height="1em"
+    viewBox={`0 0 ${size} ${size}`}
+    aria-hidden="true"
+    set:html={data.body}
+  />
+)}

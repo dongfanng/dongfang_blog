@@ -1,3 +1,5 @@
+import { siteConfig } from '@/config/site';
+
 export interface SEOProps {
   title?: string;
   description?: string;
@@ -8,14 +10,11 @@ export interface SEOProps {
   tags?: string[];
 }
 
-export const SITE_TITLE = '东方的博客';
-export const SITE_DESCRIPTION = '随便写点东西的地方';
-export const SITE_URL = import.meta.env.SITE || 'https://blog.example.com';
+/** 站点绝对 URL（构建时优先用 Astro `site`） */
+export const siteUrl = import.meta.env.SITE || siteConfig.url;
 
-/**
- * 构建页面标题
- */
+/** 构建页面标题：无标题或已是站名时不重复拼接 */
 export function buildTitle(title?: string): string {
-  if (!title) return SITE_TITLE;
-  return `${title} | ${SITE_TITLE}`;
+  if (!title || title === siteConfig.name) return siteConfig.name;
+  return `${title} | ${siteConfig.name}`;
 }

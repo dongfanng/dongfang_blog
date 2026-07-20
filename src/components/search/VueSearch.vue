@@ -70,7 +70,7 @@
         </div>
         <div v-else-if="results.length > 0" class="flex flex-col gap-1">
           <a
-            v-for="item in results.slice(0, 5)"
+            v-for="item in results"
             :key="item.url"
             :href="item.url"
             @click="handleResultClick"
@@ -87,17 +87,6 @@
               <span class="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-xs font-semibold mr-2 shrink-0">内容</span>
               <span v-html="item.content"></span>
             </div>
-          </a>
-          <a
-            v-if="results.length > 5"
-            :href="`/search?q=${encodeURIComponent(currentQuery)}`"
-            @click="handleViewMoreClick"
-            class="group block rounded-xl text-lg px-3 py-2 text-center font-bold text-primary-600 dark:text-primary-400 hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:bg-black/5 dark:focus:bg-white/10 focus:ring-2 focus:ring-inset focus:ring-primary-500/40 transition-colors"
-          >
-            <span class="inline-flex items-center">
-              查看更多结果 ({{ results.length - 5 }} 个)
-              <VueIcon icon="lucide:arrow-right" class="text-[0.75rem] ml-1" />
-            </span>
           </a>
         </div>
         <div v-else-if="currentQuery" class="block rounded-xl text-lg px-3 py-2 text-black/50 dark:text-white/50">
@@ -268,10 +257,6 @@ function togglePanel() {
 }
 
 function handleResultClick() {
-  hidePanel();
-}
-
-function handleViewMoreClick() {
   hidePanel();
 }
 
