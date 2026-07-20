@@ -289,7 +289,6 @@ function initialize() {
 onMounted(() => {
   document.addEventListener('click', handleGlobalClick);
   document.addEventListener('keydown', handleGlobalKeydown);
-  (window as any).openSearch = togglePanel;
 
   if (import.meta.env.PROD) {
     if ((window as any).pagefind) {

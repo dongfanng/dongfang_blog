@@ -8,6 +8,9 @@ export const siteConfig = {
   /** 作者名称 */
   author: '东方',
 
+  /** 头像文字（首页 Banner、关于页等） */
+  avatarText: '东',
+
   /** 博客起始日期（用于运行时间统计） */
   startDate: '2026-07-18T00:00:00',
 
@@ -22,8 +25,6 @@ export const siteConfig = {
 
   /** 首页配置 */
   home: {
-    /** 首页 Hero 头像显示的文字 */
-    avatarText: '东',
     /** 首页显示的最新文章数量 */
     recentPostsCount: 6,
     /** 横幅壁纸配置 */
@@ -48,4 +49,3 @@ export const siteConfig = {
   ],
 } as const;
 
-export type SiteConfig = typeof siteConfig;

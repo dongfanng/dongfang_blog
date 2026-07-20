@@ -15,8 +15,6 @@
   --color-primary-700: #1d4ed8;
   --color-primary-800: #1e40af;
   --color-primary-900: #1e3a8a;
-
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace';
 }
 
 @layer base {
@@ -308,9 +306,6 @@
 @layer components {
   .container-prose {
     @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-  .container-wide {
-    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 

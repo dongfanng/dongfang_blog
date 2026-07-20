@@ -1,24 +1,18 @@
 <template>
-  <Icon :icon="icon" :class="className" :style="iconStyle" />
+  <Icon :icon="icon" :class="className" width="1em" height="1em" />
 </template>
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import type { IconifyIcon } from '@iconify/vue';
 
 interface Props {
-  icon: string | IconifyIcon;
-  size?: string | number;
+  icon: string;
   class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 20,
   class: '',
 });
 
 const className = props.class;
-const iconStyle = typeof props.size === 'number'
-  ? { width: `${props.size}px`, height: `${props.size}px` }
-  : {};
 </script>

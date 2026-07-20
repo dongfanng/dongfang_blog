@@ -10,15 +10,11 @@
 .container-prose {
   @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
 }
-.container-wide {
-  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
-}
 ```
 
 | 类名 | 最大宽度 | 水平 padding | 用途 |
 |---|---|---|---|
 | `.container-prose` | 56rem (896px) | px-4 sm:px-6 lg:px-8 | 全站标准容器，Header/Footer/正文统一使用 |
-| `.container-wide` | 72rem (1152px) | px-4 sm:px-6 lg:px-8 | 暂未使用（PostLayout 已改回 container-prose） |
 
 **设计原则**：容器类不包含垂直 padding，由使用方按需追加 `py-8` / `py-12`。
 
@@ -122,8 +118,6 @@ xl 断点能容纳正文(56rem) + gap(2rem) + TOC(12rem) + 左右边距。
   --color-primary-700: #1d4ed8;
   --color-primary-800: #1e40af;
   --color-primary-900: #1e3a8a;
-
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', 'monospace';
 }
 ```
 
