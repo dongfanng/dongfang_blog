@@ -11,9 +11,6 @@ export const siteConfig = {
   /** 头像文字（首页 Banner、关于页等） */
   avatarText: '东',
 
-  /** 博客起始日期（用于运行时间统计） */
-  startDate: '2026-07-18T00:00:00',
-
   /** 站点 URL */
   url: 'https://blog.example.com',
 

@@ -1,27 +1,22 @@
 ---
 import { siteConfig } from '@/config/site';
-import VueSiteStats from '../stats/VueSiteStats.vue';
 import Icon from '@/components/ui/Icon.astro';
 ---
 
 <footer class="border-t border-gray-200 dark:border-gray-800 mt-16">
   <div class="container-prose py-12">
     <div class="flex flex-col items-center gap-4 md:flex-row md:justify-between">
-      <div class="flex flex-col items-center gap-2 text-center text-gray-600 dark:text-gray-400 md:flex-row md:gap-3 md:text-left">
-        <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-          <span>© {new Date().getFullYear()} {siteConfig.name}</span>
-          <span class="hidden md:inline">·</span>
-          <a
-            href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hidden md:inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors underline decoration-gray-300 dark:decoration-gray-700 hover:decoration-primary-500"
-          >
-            CC BY-NC-SA 4.0
-          </a>
-        </div>
+      <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-gray-600 dark:text-gray-400 md:justify-start">
+        <span>© {new Date().getFullYear()} {siteConfig.name}</span>
         <span class="hidden md:inline">·</span>
-        <span class="hidden md:inline"><VueSiteStats client:visible /></span>
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hidden md:inline-block text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors underline decoration-gray-300 dark:decoration-gray-700 hover:decoration-primary-500"
+        >
+          CC BY-NC-SA 4.0
+        </a>
       </div>
       <div class="flex items-center gap-4">
         <a href={siteConfig.social.rss} class="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
