@@ -12,7 +12,7 @@ export const siteConfig = {
   avatarText: '东',
 
   /** 站点 URL */
-  url: 'https://blog.example.com',
+  url: 'https://dongfang-blog.pages.dev',
 
   /** 社交链接 */
   social: {

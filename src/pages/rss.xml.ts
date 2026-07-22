@@ -16,6 +16,7 @@ export async function GET(context: APIContext) {
       pubDate: post.data.pubDate,
       description: post.data.description,
       link: `/blog/${post.slug}/`,
+      author: siteConfig.author,
     })),
   });
 }

@@ -44,19 +44,11 @@ npm run preview
 
 ## 部署
 
-### Vercel（推荐）
+### Cloudflare Pages
 
 1. 推送到 GitHub 仓库
-2. 使用 Vercel 导入仓库，自动部署
-
-### GitHub Pages
-
-```bash
-# 构建
-npm run build
-
-# 将 dist 目录推送到 gh-pages 分支
-```
+2. 在 Cloudflare Pages 导入仓库，构建命令 `npm run build`，输出目录 `dist`
+3. 站点地址：https://dongfang-blog.pages.dev
 
 ## 项目结构
 
