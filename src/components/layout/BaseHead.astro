@@ -51,7 +51,7 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
   {category && <meta property="article:section" content={category}>}
   {tags?.map((tag) => <meta property="article:tag" content={tag}>)}
 
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content={pageImage ? 'summary_large_image' : 'summary'}>
   <meta name="twitter:title" content={pageTitle}>
   <meta name="twitter:description" content={description}>
   {pageImage && <meta name="twitter:image" content={pageImage}>}
