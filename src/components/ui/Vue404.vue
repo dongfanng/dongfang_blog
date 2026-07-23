@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-1 items-center justify-center p-4">
+  <div class="flex items-center justify-center p-4" style="min-height: calc(100vh - 16rem);">
     <div class="w-full transition-all duration-300" :class="maximized ? 'max-w-4xl' : 'max-w-2xl'">
       <!-- Terminal window -->
       <div class="rounded-xl overflow-hidden border border-gray-700 shadow-2xl">
