@@ -10,7 +10,7 @@
             v-for="item in siteConfig.nav"
             :key="item.href"
             :href="item.href"
-            class="hidden sm:inline-flex text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="hidden sm:inline-flex h-11 items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
           >
             {{ item.title }}
           </a>
@@ -19,7 +19,7 @@
           <!-- 主题切换按钮 -->
           <button
             @click="toggleTheme"
-            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label="切换主题"
           >
             <!-- 深色模式时显示太阳 -->

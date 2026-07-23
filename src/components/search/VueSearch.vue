@@ -27,7 +27,7 @@
     <!-- 移动端搜索按钮 -->
     <button
       @click="togglePanel"
-      class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="搜索文章"
     >
       <VueIcon icon="lucide:search" class="text-gray-600 dark:text-gray-300" />
@@ -36,7 +36,7 @@
     <!-- 搜索面板（浮动下拉，仿 Firefly） -->
     <div
       id="search-panel"
-      class="search-panel fixed lg:absolute z-50 top-16 lg:top-full lg:mt-1 left-3 right-3 lg:left-auto lg:right-0 lg:w-96
+      class="search-panel fixed lg:absolute z-50 top-16 lg:top-full lg:mt-2 left-3 right-3 lg:left-auto lg:right-0 lg:w-96
              bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-2
              transition-all duration-150 origin-top"
       :class="{ 'panel-closed': !panelVisible }"
