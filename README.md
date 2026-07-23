@@ -19,7 +19,6 @@
 - ✅ 暗色/亮色主题切换
 - ✅ 代码语法高亮
 - ✅ 代码复制按钮
-- ✅ 阅读进度条
 - ✅ 回到顶部按钮
 - ✅ 相关文章推荐
 - ✅ 上一篇/下一篇导航
@@ -63,7 +62,6 @@ npm run preview
 │   │   ├── ArticleCard.astro # 文章卡片
 │   │   ├── ThemeToggle.astro # 主题切换按钮
 │   │   ├── TableOfContents.astro # 目录导航
-│   │   ├── VueReadingProgress.vue # 阅读进度条
 │   │   └── BackToTop.astro   # 回到顶部按钮
 │   ├── content/             # 内容（文章）
 │   │   ├── blog/            # 博客文章

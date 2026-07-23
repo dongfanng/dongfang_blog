@@ -1,12 +1,4 @@
 <template>
-  <!-- 阅读进度 -->
-  <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
-    <div
-      class="h-full bg-primary-500 dark:bg-primary-400"
-      :style="{ width: progress + '%' }"
-    />
-  </div>
-
   <!-- 回到顶部 -->
   <button
     v-show="showBackToTop"
@@ -37,7 +29,6 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import VueIcon from '../ui/VueIcon.vue';
 
-const progress = ref(0);
 const showBackToTop = ref(false);
 
 const lightboxVisible = ref(false);
@@ -46,8 +37,6 @@ const lightboxAlt = ref('');
 
 function updateScrollUi() {
   const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  progress.value = scrollHeight > 0 ? (winScroll / scrollHeight) * 100 : 0;
   showBackToTop.value = winScroll > 300;
 }
 
