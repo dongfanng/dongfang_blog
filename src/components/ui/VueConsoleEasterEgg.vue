@@ -18,6 +18,5 @@ onMounted(() => {
   console.log('%c发现你打开了控制台，真不错！', 'color: #10b981; font-size: 14px; font-weight: bold;');
   console.log('%c既然来了，随便看看代码吧～', 'color: #6b7280;');
   console.log('%c有什么问题欢迎联系我！', 'color: #6b7280;');
-  console.log('');
 });
 </script>
