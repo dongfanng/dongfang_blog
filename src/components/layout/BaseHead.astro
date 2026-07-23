@@ -25,14 +25,21 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script is:inline>
     (function() {
-      function applyTheme() {
+      function getTheme() {
         const stored = localStorage.getItem('theme');
-        const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.classList.toggle('dark', theme === 'dark');
+        return stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       }
-      applyTheme();
-      // View Transitions 换页会替换 <html>，需在 swap 后重新应用主题
-      document.addEventListener('astro:after-swap', applyTheme);
+      function applyTheme(root) {
+        root.classList.toggle('dark', getTheme() === 'dark');
+      }
+      applyTheme(document.documentElement);
+      // 必须在 swap 前写入新文档，否则过渡动画会先露出亮色 SSR HTML
+      document.addEventListener('astro:before-swap', (event) => {
+        applyTheme(event.newDocument.documentElement);
+      });
+      document.addEventListener('astro:after-swap', () => {
+        applyTheme(document.documentElement);
+      });
     })();
   </script>
   <title>{pageTitle}</title>
