@@ -61,6 +61,7 @@ const readingTime = getReadingTime(post.body);
                 class="w-full aspect-video md:h-full object-cover rounded-lg"
                 loading={priority ? 'eager' : 'lazy'}
                 fetchpriority={priority ? 'high' : 'auto'}
+                decoding="async"
               />
             ) : (
               <Image

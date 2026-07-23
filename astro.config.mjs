@@ -18,6 +18,11 @@ const prettyCodeOptions = {
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.url,
+  // 预取页面，减轻 View Transitions 换页等待（Cloudflare 静态站尤其明显）
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   integrations: [
     vue(),
     sitemap(),
