@@ -47,6 +47,9 @@
               class="flex-1 bg-transparent outline-none text-gray-200 caret-green-400"
               @keydown.enter="executeCommand"
               @keydown.tab.prevent="handleTab"
+              @keydown.arrow-up.prevent="historyPrev"
+              @keydown.arrow-down.prevent="historyNext"
+              @keydown.ctrl.l.prevent="clearScreen"
               autocomplete="off"
               spellcheck="false"
             />
@@ -98,6 +101,35 @@ function scrollToBottom() {
   });
 }
 
+// 命令历史
+const commandHistory = ref<string[]>([]);
+let historyIndex = -1;
+
+function historyPrev() {
+  if (commandHistory.value.length === 0) return;
+  if (historyIndex === -1) {
+    historyIndex = commandHistory.value.length - 1;
+  } else if (historyIndex > 0) {
+    historyIndex--;
+  }
+  currentInput.value = commandHistory.value[historyIndex];
+}
+
+function historyNext() {
+  if (historyIndex === -1) return;
+  if (historyIndex < commandHistory.value.length - 1) {
+    historyIndex++;
+    currentInput.value = commandHistory.value[historyIndex];
+  } else {
+    historyIndex = -1;
+    currentInput.value = '';
+  }
+}
+
+function clearScreen() {
+  visibleLines.value = [];
+}
+
 // 命令处理
 const commands: Record<string, (args: string[]) => TerminalLine[]> = {
   help: () => [
@@ -109,9 +141,11 @@ const commands: Record<string, (args: string[]) => TerminalLine[]> = {
     { text: '  whoami     显示当前用户', class: 'text-gray-400' },
     { text: '  date       显示当前时间', class: 'text-gray-400' },
     { text: '  echo <txt> 回显文本', class: 'text-gray-400' },
+    { text: '  history    查看历史命令', class: 'text-gray-400' },
     { text: '  clear      清空终端', class: 'text-gray-400' },
     { text: '  neofetch   系统信息', class: 'text-gray-400' },
     { text: '  home       返回首页', class: 'text-gray-400' },
+    { text: '  exit       退出终端', class: 'text-gray-400' },
   ],
   ls: () => [
     { text: 'readme.md   404.txt   home/', class: 'text-gray-300' },
@@ -139,6 +173,9 @@ const commands: Record<string, (args: string[]) => TerminalLine[]> = {
   date: () => [{ text: new Date().toLocaleString('zh-CN'), class: 'text-gray-300' }],
   echo: (args) => [{ text: args.join(' ') || '', class: 'text-gray-300' }],
   clear: () => { visibleLines.value = []; return []; },
+  history: () => commandHistory.value.length > 0
+    ? commandHistory.value.map((cmd, i) => ({ text: `  ${i + 1}  ${cmd}`, class: 'text-gray-400' }))
+    : [{ text: '没有历史命令', class: 'text-gray-500' }],
   neofetch: () => [
     { text: '  ╭─────────╮   guest@blog', class: 'text-green-400' },
     { text: '  │  4 0 4  │   ──────────', class: 'text-green-400' },
@@ -163,6 +200,8 @@ function executeCommand() {
   if (!input) return;
 
   visibleLines.value.push({ text: input, prompt: true, class: 'text-gray-200' });
+  commandHistory.value.push(input);
+  historyIndex = -1;
   currentInput.value = '';
 
   const [cmd, ...args] = input.split(/\s+/);
