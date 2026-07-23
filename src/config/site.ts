@@ -44,5 +44,13 @@ export const siteConfig = {
     { title: '归档', href: '/archive' },
     { title: '关于', href: '/about' },
   ],
+
+  /** 评论系统（Giscus）配置 — 从 https://giscus.app 获取 repoId 和 categoryId */
+  comment: {
+    repo: 'dongfanng/dongfang_blog',
+    repoId: 'R_kgDOTc1ykg',
+    category: 'Announcements',
+    categoryId: 'DIC_kwDOTc1yks4DBxaH',
+  },
 } as const;
 

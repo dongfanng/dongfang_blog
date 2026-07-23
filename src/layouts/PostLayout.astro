@@ -6,6 +6,7 @@ import Icon from '@/components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
 import VuePostEnhancements from '@/components/article/VuePostEnhancements.vue';
+import VueComments from '@/components/article/VueComments.vue';
 import type { BlogPost } from '@/utils/posts';
 import { getReadingTime, getWordCount } from '@/utils/posts';
 
@@ -152,6 +153,7 @@ const wordCount = getWordCount(post.body);
       </section>
     )}
     </article>
+    <VueComments client:visible />
   </div>
 
   {headings.length > 0 && (
