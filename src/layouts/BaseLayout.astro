@@ -11,16 +11,18 @@ interface Props extends SEOProps {}
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" transition:animate="none">
   <BaseHead {...Astro.props} />
   <body class="min-h-screen flex flex-col pt-16">
-    <VueHeader client:load />
-    <main class="flex-1">
-      <slot />
-    </main>
+    <VueHeader client:load transition:persist="site-header" />
+    <div class="flex flex-1 flex-col" transition:name="page-content">
+      <main class="flex-1">
+        <slot />
+      </main>
+    </div>
     <Footer />
-    <VueClickEffect client:load transition:persist />
-    <VueConsoleEasterEgg client:load transition:persist />
+    <VueClickEffect client:load transition:persist="click-effect" />
+    <VueConsoleEasterEgg client:load transition:persist="console-egg" />
   </body>
 </html>
 

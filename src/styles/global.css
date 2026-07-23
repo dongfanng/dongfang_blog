@@ -3,6 +3,39 @@
 /* v4 默认暗色变体基于 prefers-color-scheme，本项目用 class 切换，需显式声明 */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * 正文区视图过渡：顺序淡化，避免新旧文字同屏半透明叠影。
+ * 旧层 120ms 淡出 -> 新层延迟 120ms 后 140ms 淡入，两者不重叠。
+ * 顶栏/特效等用 transition:persist，不参与重建，无需此动画。
+ */
+::view-transition-group(page-content) {
+  animation: none !important;
+}
+::view-transition-old(page-content) {
+  animation: page-out 120ms ease both !important;
+}
+::view-transition-new(page-content) {
+  animation: page-in 140ms ease 120ms both !important;
+}
+@keyframes page-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 尊重「减少动效」偏好：极短时长 + 零延迟，保留 fill-mode 锁定终态（old→0、new→1） */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 1e-4ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
 /* v4 CSS-first 配置：从 tailwind.config.mjs 迁移而来 */
 @theme {
   --color-primary-50: #eff6ff;
@@ -40,7 +73,7 @@
   }
 
   body {
-    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200;
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
   }
 
   .prose {

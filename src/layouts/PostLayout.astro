@@ -26,7 +26,7 @@ const wordCount = getWordCount(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
-  <VuePostEnhancements client:load />
+  <VuePostEnhancements client:load transition:persist="post-enhancements" />
 
   <div class="container-prose py-8">
     <article>
