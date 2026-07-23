@@ -49,6 +49,7 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
   <meta property="og:title" content={pageTitle}>
   <meta property="og:description" content={description}>
   <meta property="og:site_name" content={siteConfig.name}>
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:url" content={Astro.url.href}>
   <meta property="og:type" content={pubDate ? 'article' : 'website'}>
   {pageImage && <meta property="og:image" content={pageImage}>}
