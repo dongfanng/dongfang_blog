@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import path from 'path';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
 import rehypePrettyCode from 'rehype-pretty-code';
@@ -33,6 +34,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        '@': path.resolve('./src'),
+      },
+    },
     build: {
       rollupOptions: {
         external: ['/pagefind/pagefind.js'],
