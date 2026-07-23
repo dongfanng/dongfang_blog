@@ -23,11 +23,33 @@
             aria-label="切换主题"
           >
             <!-- 深色模式时显示太阳 -->
-            <VueIcon v-if="isDark" icon="lucide:sun" class="text-yellow-500" />
+            <VueIcon v-if="isDark" icon="lucide:sun" class="text-[1.25rem] text-yellow-500" />
             <!-- 浅色模式时显示月亮 -->
-            <VueIcon v-else icon="lucide:moon" class="text-gray-600 dark:text-gray-400" />
+            <VueIcon v-else icon="lucide:moon" class="text-[1.25rem] text-gray-600 dark:text-gray-400" />
+          </button>
+          <!-- 移动端汉堡菜单按钮 -->
+          <button
+            @click="toggleMobileMenu"
+            class="sm:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="菜单"
+          >
+            <VueIcon :icon="mobileMenuOpen ? 'lucide:x' : 'lucide:menu'" class="text-[1.25rem] text-gray-600 dark:text-gray-300" />
           </button>
         </nav>
+      </div>
+    </div>
+    <!-- 移动端导航菜单 -->
+    <div v-show="mobileMenuOpen" class="sm:hidden border-t border-gray-200 dark:border-gray-800">
+      <div class="container-prose py-2">
+        <a
+          v-for="item in siteConfig.nav"
+          :key="item.href"
+          :href="item.href"
+          class="block px-3 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          @click="mobileMenuOpen = false"
+        >
+          {{ item.title }}
+        </a>
       </div>
     </div>
   </header>
@@ -40,6 +62,7 @@ import VueIcon from '../ui/VueIcon.vue';
 import VueSearch from '../search/VueSearch.vue';
 
 const isDark = ref(false);
+const mobileMenuOpen = ref(false);
 
 function setTheme(theme: string) {
   if (theme === 'dark') {
@@ -55,6 +78,10 @@ function toggleTheme() {
   const newTheme = isDark.value ? 'light' : 'dark';
   localStorage.setItem('theme', newTheme);
   setTheme(newTheme);
+}
+
+function toggleMobileMenu() {
+  mobileMenuOpen.value = !mobileMenuOpen.value;
 }
 
 onMounted(() => {

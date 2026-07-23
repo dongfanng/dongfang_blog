@@ -30,7 +30,7 @@
       class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="搜索文章"
     >
-      <VueIcon icon="lucide:search" class="text-gray-600 dark:text-gray-300" />
+      <VueIcon icon="lucide:search" class="text-[1.25rem] text-gray-600 dark:text-gray-300" />
     </button>
 
     <!-- 搜索面板（浮动下拉，仿 Firefly） -->
