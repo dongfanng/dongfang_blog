@@ -58,7 +58,7 @@ function toggleTheme() {
 }
 
 onMounted(() => {
-  // 同步 isDark 状态，主题已经在 BaseHead 中设置好了
+  // 以 localStorage / html class 为准（View Transitions 后由 BaseHead after-swap 恢复）
   isDark.value = document.documentElement.classList.contains('dark');
 });
 </script>

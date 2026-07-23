@@ -25,15 +25,14 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script is:inline>
     (function() {
-      const getPreferredTheme = () => {
+      function applyTheme() {
         const stored = localStorage.getItem('theme');
-        if (stored) return stored;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      };
-      const theme = getPreferredTheme();
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
+        const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
       }
+      applyTheme();
+      // View Transitions 换页会替换 <html>，需在 swap 后重新应用主题
+      document.addEventListener('astro:after-swap', applyTheme);
     })();
   </script>
   <title>{pageTitle}</title>
