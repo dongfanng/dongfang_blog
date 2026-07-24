@@ -32,7 +32,7 @@
 | 关于 | `src/pages/about.astro` | `container-prose` | `py-12` |
 | 文章页 | `src/layouts/PostLayout.astro` | `container-prose` | `py-8` |
 
-## 3. 文章页 TOC 布局
+## 3. 文章页侧栏布局（Series + TOC）
 
 文件：`src/layouts/PostLayout.astro`
 
@@ -43,14 +43,28 @@
   <!-- 正文：container-prose，与 Header/Footer 完全一致 -->
   <div class="container-prose py-8">
     <article>
-      <header>...</header>
+      <header>
+        <!-- 系列徽章（纯文案） -->
+        <!-- xl 以下：details「本系列目录」 -->
+      </header>
       <div class="prose">...</div>
-      <nav>上一篇/下一篇</nav>
+      <!-- 页脚：相关文章；评论在 article 外 -->
       <section>相关文章</section>
     </article>
+    <VueComments />
   </div>
 
-  <!-- TOC：fixed 定位，脱离正常流，不挤占正文 -->
+  <!-- Series：正文左侧，仅当文章属于系列时显示 -->
+  {seriesNav && (
+    <aside class="hidden xl:block fixed top-24 z-30 w-48"
+           style="left: calc(50% - 42rem);">
+      <div class="max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <SeriesNav variant="aside" />
+      </div>
+    </aside>
+  )}
+
+  <!-- TOC：正文右侧 -->
   {headings.length > 0 && (
     <aside class="hidden xl:block fixed top-24 z-30 w-48"
            style="left: calc(50% + 30rem);">
@@ -65,42 +79,29 @@
 ### 空间计算
 
 ```
-|<---------------- 视口 ---------------->|
-|                                       |
-|       [Header max-w-4xl 居中]         |
-|                                       |
-|       [----正文 max-w-4xl----][TOC]   |
-|       [    56rem 居中      ][12rem]  |
-|       ↑ 正文与 Header 严格对齐        |
-|                                       |
-|       [Footer max-w-4xl 居中]         |
-|                                       |
+|<---------------- 视口 (xl+) ---------------->|
+|  [Series]  [----正文 max-w-4xl----]  [TOC]  |
+|   12rem       56rem 居中              12rem  |
 ```
 
 - 正文：max-w-4xl = 56rem，居中
-- 正文右边界：50% + 28rem
-- TOC 左边界：`calc(50% + 30rem)` = 正文右边界 + 2rem gap
-- TOC 宽度：w-48 = 12rem
-- TOC 右边界：50% + 30rem + 12rem = 50% + 42rem
+- 正文左边界：50% - 28rem；正文右边界：50% + 28rem
+- Series 右边界：`calc(50% - 30rem)` = 正文左边界 - 2rem gap  
+  Series 左边界：`calc(50% - 42rem)`（宽度 w-48 = 12rem）
+- TOC 左边界：`calc(50% + 30rem)` = 正文右边界 + 2rem gap  
+  TOC 右边界：50% + 42rem
 
 ### 断点选择
 
-TOC 显示断点为 `xl`（1280px），原因：
+两侧栏显示断点均为 `xl`（1280px）。左右同时出现时需容纳：
 
-| 断点 | 视口宽度 | TOC 右边界 | 是否容纳 |
-|---|---|---|---|
-| lg | 1024px (64rem) | 50%+42rem = 74rem | 超出 10rem |
-| xl | 1280px (80rem) | 50%+42rem = 82rem | 剩余 8rem |
-| 2xl | 1536px (96rem) | 50%+42rem = 90rem | 剩余 6rem |
+`12rem (Series) + 2rem + 56rem + 2rem + 12rem = 84rem`，略大于 80rem 视口——边距会略紧；无系列时与原先 TOC 布局一致。
 
-xl 断点能容纳正文(56rem) + gap(2rem) + TOC(12rem) + 左右边距。
+### 窄屏（`< xl`）
 
-### 更窄屏幕的 TOC 方案
-
-如需在 lg 断点也显示 TOC，可以：
-1. **继续缩小 TOC**：`w-48` 改 `w-40`（10rem）
-2. **窄屏用浮动按钮**：在 xl 以下显示 TOC 按钮，点击弹出面板（需额外组件）
-3. **调整正文宽度**：缩小 max-w-4xl，但会影响全站一致性
+- 无左右 fixed 侧栏
+- 有系列时：标题区下方 `<details>`「本系列目录」（`SeriesNav variant="inline"`）
+- TOC：桌面侧栏外暂无窄屏入口（既有行为）
 
 ## 4. 主题色体系
 
@@ -151,8 +152,8 @@ xl 断点能容纳正文(56rem) + gap(2rem) + TOC(12rem) + 左右边距。
 | `sm` | ≥640px | 大屏手机 |
 | `md` | ≥768px | 平板 |
 | `lg` | ≥1024px | 小屏桌面 |
-| `xl` | ≥1280px | 标准桌面 |
-| `2xl` | ≥1536px | 宽屏桌面（TOC 显示） |
+| `xl` | ≥1280px | 标准桌面（文章页 Series / TOC 侧栏） |
+| `2xl` | ≥1536px | 宽屏桌面 |
 
 ## 6. 关键约束
 
@@ -162,12 +163,11 @@ xl 断点能容纳正文(56rem) + gap(2rem) + TOC(12rem) + 左右边距。
 - 文章页 TOC 不能挤占正文空间，必须用 `fixed` 定位脱离正常流
 - 添加新页面时，优先使用 `container-prose`，保持全站对齐
 
-### TOC 空间限制
+### Series / TOC 空间限制
 
-- 正文 56rem + TOC 16rem + gap 2rem = 74rem 内容宽度
-- 加上左右边距，需要约 92rem（1472px）视口才够
-- 这就是 TOC 只在 2xl 断点显示的根本原因
-- 若要降低断点，必须缩小 TOC 宽度或正文宽度
+- 正文 56rem + 双侧栏各 12rem + gap 各 2rem = 84rem（双侧同时出现时略紧于 xl 80rem 视口）
+- 仅 TOC 时：正文 56rem + gap 2rem + TOC 12rem = 70rem，xl 足够
+- 侧栏断点为 `xl`；若要在更窄屏显示，需缩小侧栏或正文宽度
 
 ### 样式分层
 

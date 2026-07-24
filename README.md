@@ -21,9 +21,10 @@
 - ✅ 目录导航（桌面端滚动高亮）
 - ✅ Pagefind 全文搜索
 - ✅ Giscus 评论
-- ✅ 相关文章推荐 / 上一篇下一篇
+- ✅ 相关文章推荐
 - ✅ 回到顶部
 - ✅ RSS / Sitemap
+- ✅ 文章系列（左侧目录 + `/blog/series` 发现页）
 
 ## 开发
 
@@ -108,6 +109,8 @@ tags: ["React", "TypeScript"]  # 多标签
 draft: false              # 是否为草稿
 sticky: 0                 # 是否置顶（数字越大越靠前）
 image: /images/cover.jpg  # 封面图（可选）
+series: Astro 实战        # 可选；同名即同系列
+seriesOrder: 1            # 可选；系列内排序（越小越靠前）
 ---
 
 文章内容...
