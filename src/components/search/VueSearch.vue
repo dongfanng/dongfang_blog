@@ -132,7 +132,7 @@ const devPosts: SearchResult[] = [
     id: '1',
     url: '/blog/2026/getting-started',
     meta: { title: '欢迎来到我的博客' },
-    excerpt: '这是博客的第一篇文章，介绍一下这个博客的技术栈和未来的写作计划。使用了 Astro、Tailwind CSS、TypeScript、MDX 等技术。',
+    excerpt: '这是博客的第一篇文章，介绍一下这个博客的技术栈和未来的写作计划。使用了 Astro、Vue、Tailwind CSS、TypeScript 等技术。',
   },
   {
     id: '2',
