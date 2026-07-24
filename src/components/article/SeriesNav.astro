@@ -1,0 +1,77 @@
+---
+import type { SeriesNav } from '@/utils/posts';
+import { getSeriesHref } from '@/utils/posts';
+
+interface Props {
+  seriesNav: SeriesNav;
+  /** aside：桌面左侧栏；inline：窄屏 details 内嵌 */
+  variant?: 'aside' | 'inline';
+}
+
+const { seriesNav, variant = 'aside' } = Astro.props;
+const { series, index, total, items } = seriesNav;
+const isAside = variant === 'aside';
+const seriesHref = getSeriesHref(series);
+---
+
+<nav class:list={[isAside ? 'series-nav' : 'series-nav-inline']}>
+  {isAside ? (
+    <div class="mb-3 flex items-baseline justify-between gap-2">
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate min-w-0" title={series}>
+        <a
+          href={seriesHref}
+          class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+        >
+          {series}
+        </a>
+      </h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400 shrink-0 tabular-nums">
+        {index + 1} / {total}
+      </p>
+    </div>
+  ) : (
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+      <a
+        href={seriesHref}
+        class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+      >
+        {series}
+      </a>
+      {' · '}
+      {index + 1}/{total}
+    </p>
+  )}
+
+  <ol class="space-y-1.5 text-sm">
+    {items.map((item, i) => {
+      const isCurrent = i === index;
+      return (
+        <li>
+          {isCurrent ? (
+            <span
+              aria-current="page"
+              class:list={[
+                'flex items-start gap-1.5 rounded-md font-medium text-primary-600 dark:text-primary-400',
+                isAside ? 'py-0.5' : 'px-2 py-1.5 bg-primary-50 dark:bg-primary-950/40 rounded-lg',
+              ]}
+            >
+              <span class="shrink-0 tabular-nums text-xs opacity-70 w-4 text-right pt-0.5">{i + 1}</span>
+              <span class:list={[isAside ? 'line-clamp-2' : '']}>{item.data.title}</span>
+            </span>
+          ) : (
+            <a
+              href={`/blog/${item.slug}`}
+              class:list={[
+                'flex items-start gap-1.5 text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors',
+                isAside ? 'py-0.5' : 'px-2 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/60',
+              ]}
+            >
+              <span class="shrink-0 tabular-nums text-xs text-gray-400 dark:text-gray-500 w-4 text-right pt-0.5">{i + 1}</span>
+              <span class:list={[isAside ? 'line-clamp-2' : '']}>{item.data.title}</span>
+            </a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>

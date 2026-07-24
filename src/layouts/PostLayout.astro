@@ -7,26 +7,27 @@ import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
 import VuePostEnhancements from '@/components/article/VuePostEnhancements.vue';
 import VueComments from '@/components/article/VueComments.vue';
-import type { BlogPost } from '@/utils/posts';
-import { getReadingTime, getWordCount } from '@/utils/posts';
+import SeriesNav from '@/components/article/SeriesNav.astro';
+import type { BlogPost, SeriesNav as SeriesNavData } from '@/utils/posts';
+import { getReadingTime, getWordCount, getSeriesHref } from '@/utils/posts';
 
 interface Props {
   post: BlogPost;
   headings?: { depth: number; text: string; slug: string }[];
-  prev?: BlogPost | null;
-  next?: BlogPost | null;
   related?: BlogPost[];
+  seriesNav?: SeriesNavData | null;
   /** 最后更新时间：frontmatter.updatedDate 或 git 提交时间 */
   updatedDate?: Date | null;
 }
 
-const { post, headings = [], prev, next, related, updatedDate = null } = Astro.props;
+const { post, headings = [], related, seriesNav = null, updatedDate = null } = Astro.props;
 const { title, description, pubDate, category, tags, image } = post.data;
 const readingTime = getReadingTime(post.body);
 const wordCount = getWordCount(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
+  {/* client:load 而非 client:only：dev 下 VT 会对 client:only 开隐藏 iframe 并最多空等 ~1s */}
   <VuePostEnhancements client:load transition:persist="post-enhancements" />
 
   <div class="container-prose py-8">
@@ -36,6 +37,14 @@ const wordCount = getWordCount(post.body);
         <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
           {category}
         </a>
+        {seriesNav && (
+          <a
+            href={getSeriesHref(seriesNav.series)}
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-primary-50 text-primary-700 dark:bg-primary-950/50 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/50 transition-colors"
+          >
+            系列 · {seriesNav.series} · {seriesNav.index + 1}/{seriesNav.total}
+          </a>
+        )}
         <time class="text-sm text-gray-500 dark:text-gray-400">
           发布于 {formatDate(pubDate)}
         </time>
@@ -64,6 +73,16 @@ const wordCount = getWordCount(post.body);
           </a>
         ))}
       </div>
+      {seriesNav && (
+        <details class="xl:hidden mt-4 rounded-lg border border-gray-200 dark:border-gray-800">
+          <summary class="cursor-pointer px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+            本系列目录
+          </summary>
+          <div class="px-3 pb-3">
+            <SeriesNav seriesNav={seriesNav} variant="inline" />
+          </div>
+        </details>
+      )}
     </header>
 
     {image && (
@@ -109,29 +128,6 @@ const wordCount = getWordCount(post.body);
       </span>
     </div>
 
-    {(prev || next) && (
-      <nav class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {prev && (
-            <a href={`/blog/${prev.slug}`} class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
-              <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">← 上一篇</div>
-              <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
-                {prev.data.title}
-              </div>
-            </a>
-          )}
-          {next && (
-            <a href={`/blog/${next.slug}`} class={`group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors text-right ${prev ? '' : 'md:col-start-2'}`}>
-              <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">下一篇 &gt;</div>
-              <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors">
-                {next.data.title}
-              </div>
-            </a>
-          )}
-        </div>
-      </nav>
-    )}
-
     {related && related.length > 0 && (
       <section class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">相关文章</h2>
@@ -155,6 +151,14 @@ const wordCount = getWordCount(post.body);
     </article>
     <VueComments client:visible />
   </div>
+
+  {seriesNav && (
+    <aside class="hidden xl:block fixed top-24 z-30 w-48" style="left: calc(50% - 42rem);">
+      <div class="max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <SeriesNav seriesNav={seriesNav} variant="aside" />
+      </div>
+    </aside>
+  )}
 
   {headings.length > 0 && (
     <aside class="hidden xl:block fixed top-24 z-30 w-48" style="left: calc(50% + 30rem);">

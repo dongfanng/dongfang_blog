@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedPosts, getSeriesList, getSeriesHref } from '@/utils/posts';
+
+const posts = await getPublishedPosts();
+const seriesList = getSeriesList(posts);
+---
+
+<BaseLayout title="系列" description={`浏览本站的 ${seriesList.length} 个文章系列。`}>
+  <div class="container-prose py-12">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        文章系列
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        共 {seriesList.length} 个系列
+      </p>
+    </header>
+
+    {seriesList.length === 0 ? (
+      <p class="text-gray-500 dark:text-gray-400">暂无系列。</p>
+    ) : (
+      <ul class="grid gap-4">
+        {seriesList.map(({ name, count }) => (
+          <li>
+            <a
+              href={getSeriesHref(name)}
+              class="flex items-center justify-between gap-4 p-5 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-lg transition-all"
+            >
+              <span class="text-lg font-semibold text-gray-900 dark:text-white">
+                {name}
+              </span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 shrink-0">
+                {count} 篇
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>

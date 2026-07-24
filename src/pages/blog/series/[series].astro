@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/article/ArticleCard.astro';
+import {
+  getPublishedPosts,
+  getSeriesNames,
+  getPostsInSeries,
+  type BlogPost,
+} from '@/utils/posts';
+
+interface Props {
+  series: string;
+  seriesPosts: BlogPost[];
+}
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const seriesNames = getSeriesNames(posts);
+  return seriesNames.map((series) => ({
+    params: { series },
+    props: {
+      series,
+      seriesPosts: getPostsInSeries(posts, series),
+    },
+  }));
+}
+
+const { series, seriesPosts } = Astro.props;
+---
+
+<BaseLayout
+  title={`系列: ${series}`}
+  description={`「${series}」系列共 ${seriesPosts.length} 篇文章。`}
+>
+  <div class="container-prose py-12">
+    <header class="mb-8">
+      <a href="/blog/series" class="text-primary-500 dark:text-primary-400 hover:underline mb-2 inline-block">
+        ← 返回系列列表
+      </a>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        系列: {series}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        共 {seriesPosts.length} 篇文章
+      </p>
+    </header>
+
+    <div class="grid gap-6">
+      {seriesPosts.map((post) => (
+        <ArticleCard post={post} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
