@@ -4,35 +4,58 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * 正文区视图过渡：顺序淡化，避免新旧文字同屏半透明叠影。
- * 旧层 120ms 淡出 -> 新层延迟 120ms 后 140ms 淡入，两者不重叠。
- * 顶栏/特效等用 transition:persist，不参与重建，无需此动画。
+ * 正文换页：
+ * 1) 旧正文用 CSS 短淡出（与 fetch 并行），截图前已透明，不会把 Hero 带进 VT 旧快照
+ * 2) 新正文 VT page-in 淡入上移
+ * 顶栏 persist，不参与这套动画。
  */
 ::view-transition-group(page-content) {
   animation: none !important;
+  background-color: var(--color-white, #fff);
+}
+html.dark ::view-transition-group(page-content) {
+  background-color: var(--color-gray-900, #111827);
 }
 ::view-transition-old(page-content) {
-  animation: page-out 120ms ease both !important;
+  animation: none !important;
+  opacity: 0 !important;
+  mix-blend-mode: normal !important;
 }
 ::view-transition-new(page-content) {
-  animation: page-in 140ms ease 120ms both !important;
-}
-@keyframes page-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  animation: page-in 150ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
+  mix-blend-mode: normal !important;
 }
 @keyframes page-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* 尊重「减少动效」偏好：极短时长 + 零延迟，保留 fill-mode 锁定终态（old→0、new→1） */
+#page-shell {
+  transition: opacity 90ms ease-out;
+}
+#page-shell[data-leaving] {
+  opacity: 0;
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 1e-4ms !important;
-    animation-delay: 0ms !important;
+  #page-shell {
+    transition: none !important;
+  }
+  ::view-transition-old(page-content),
+  ::view-transition-new(page-content) {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  ::view-transition-old(page-content) {
+    opacity: 0 !important;
   }
 }
 

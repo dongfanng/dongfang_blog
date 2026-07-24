@@ -18,12 +18,13 @@ const seriesList = getSeriesList(await getPublishedPosts());
   <BaseHead {...Astro.props} />
   <body class="min-h-screen flex flex-col pt-16">
     <VueHeader {seriesList} client:load transition:persist="site-header" transition:persist-props />
-    <div class="flex flex-1 flex-col" transition:name="page-content">
+    {/* 具名过渡只做「新页淡入」；旧页在准备阶段已隐藏，不会闪首页 Hero */}
+    <div id="page-shell" class="flex flex-1 flex-col" transition:name="page-content">
       <main class="flex-1">
         <slot />
       </main>
+      <Footer />
     </div>
-    <Footer />
     {/* 避免 client:only：dev + View Transitions 会为此隐藏 iframe 预热，换页约卡 1s */}
     <VueClickEffect client:load transition:persist="click-effect" />
     <VueConsoleEasterEgg client:idle transition:persist="console-egg" />
