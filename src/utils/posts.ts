@@ -95,16 +95,89 @@ export function getRelatedPosts(
 }
 
 /**
- * 获取上一篇和下一篇文章
+ * 系列内排序：seriesOrder 升序，缺省时按 pubDate 升序
  */
-export function getPrevNextPosts(
+function compareSeriesOrder(a: BlogPost, b: BlogPost): number {
+  const aOrder = a.data.seriesOrder;
+  const bOrder = b.data.seriesOrder;
+  if (aOrder != null && bOrder != null && aOrder !== bOrder) {
+    return aOrder - bOrder;
+  }
+  if (aOrder != null && bOrder == null) return -1;
+  if (aOrder == null && bOrder != null) return 1;
+  return a.data.pubDate.getTime() - b.data.pubDate.getTime();
+}
+
+/**
+ * 获取所有系列名称
+ */
+export function getSeriesNames(posts: BlogPost[]): string[] {
+  const names = new Set(
+    posts.map((post) => post.data.series).filter((s): s is string => Boolean(s))
+  );
+  return Array.from(names).sort();
+}
+
+export type SeriesListItem = {
+  name: string;
+  count: number;
+};
+
+/** 系列详情页路径（编码中文 / 空格等） */
+export function getSeriesHref(series: string): string {
+  return `/blog/series/${encodeURIComponent(series)}`;
+}
+
+/**
+ * 获取系列及文章数量（按系列名称排序）
+ */
+export function getSeriesList(posts: BlogPost[]): SeriesListItem[] {
+  const counts = new Map<string, number>();
+
+  posts.forEach((post) => {
+    const series = post.data.series;
+    if (!series) return;
+    counts.set(series, (counts.get(series) ?? 0) + 1);
+  });
+
+  return Array.from(counts, ([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * 获取某系列内的文章（按系列顺序）
+ */
+export function getPostsInSeries(posts: BlogPost[], series: string): BlogPost[] {
+  return posts
+    .filter((post) => post.data.series === series)
+    .sort(compareSeriesOrder);
+}
+
+export type SeriesNav = {
+  series: string;
+  index: number;
+  total: number;
+  items: BlogPost[];
+};
+
+/**
+ * 当前文章的系列导航；不属于系列时返回 null
+ */
+export function getSeriesNav(
   currentPost: BlogPost,
-  sortedPosts: BlogPost[]
-): { prev: BlogPost | null; next: BlogPost | null } {
-  const index = sortedPosts.findIndex((post) => post.slug === currentPost.slug);
-  if (index === -1) return { prev: null, next: null };
+  allPosts: BlogPost[]
+): SeriesNav | null {
+  const series = currentPost.data.series;
+  if (!series) return null;
+
+  const items = getPostsInSeries(allPosts, series);
+  const index = items.findIndex((post) => post.slug === currentPost.slug);
+  if (index === -1) return null;
+
   return {
-    prev: sortedPosts[index + 1] || null,
-    next: sortedPosts[index - 1] || null,
+    series,
+    index,
+    total: items.length,
+    items,
   };
 }

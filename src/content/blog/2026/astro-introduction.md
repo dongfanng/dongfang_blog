@@ -6,6 +6,8 @@ category: 前端开发
 tags: [Astro, JavaScript, 静态站点]
 draft: false
 sticky: 0
+series: Astro 实战
+seriesOrder: 2
 ---
 
 ## 什么是 Astro？

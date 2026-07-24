@@ -7,6 +7,8 @@ tags: [博客, 公告]
 draft: false
 sticky: 10
 image: ../../../assets/images/blog-banner.jpg
+series: Astro 实战
+seriesOrder: 1
 ---
 
 ## 你好，世界！
