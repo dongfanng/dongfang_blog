@@ -24,8 +24,9 @@ const seriesList = getSeriesList(await getPublishedPosts());
       </main>
     </div>
     <Footer />
+    {/* 避免 client:only：dev + View Transitions 会为此隐藏 iframe 预热，换页约卡 1s */}
     <VueClickEffect client:load transition:persist="click-effect" />
-    <VueConsoleEasterEgg client:load transition:persist="console-egg" />
+    <VueConsoleEasterEgg client:idle transition:persist="console-egg" />
   </body>
 </html>
 

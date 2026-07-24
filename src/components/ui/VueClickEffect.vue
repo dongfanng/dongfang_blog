@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="pointer-events-none fixed inset-0 z-50">
+  <div class="pointer-events-none fixed inset-0 z-50">
     <span
       v-for="ripple in ripples"
       :key="ripple.id"
@@ -18,7 +18,6 @@ interface Ripple {
   y: number;
 }
 
-const container = ref<HTMLElement>();
 const ripples = ref<Ripple[]>([]);
 let nextId = 0;
 
@@ -30,9 +29,8 @@ function createRipple(e: MouseEvent) {
   };
   ripples.value.push(ripple);
 
-  // 350ms 后移除
   setTimeout(() => {
-    const index = ripples.value.findIndex(r => r.id === ripple.id);
+    const index = ripples.value.findIndex((r) => r.id === ripple.id);
     if (index > -1) {
       ripples.value.splice(index, 1);
     }
@@ -40,7 +38,9 @@ function createRipple(e: MouseEvent) {
 }
 
 function getRippleStyle(ripple: Ripple) {
-  const themePrimary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-500').trim() || '#3b82f6';
+  const themePrimary =
+    getComputedStyle(document.documentElement).getPropertyValue('--color-primary-500').trim() ||
+    '#3b82f6';
   return {
     left: `${ripple.x}px`,
     top: `${ripple.y}px`,
@@ -65,7 +65,13 @@ onUnmounted(() => {
 
 <style>
 @keyframes ripple-anim {
-  0% { transform: scale(0); opacity: 1; }
-  100% { transform: scale(1.8); opacity: 0; }
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }
 </style>

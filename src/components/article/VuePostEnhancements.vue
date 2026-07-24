@@ -1,34 +1,38 @@
 <template>
-  <!-- 回到顶部 -->
-  <button
-    v-show="showBackToTop"
-    type="button"
-    class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:opacity-80 transition-all duration-200 text-white bg-primary-500 dark:bg-primary-400"
-    aria-label="回到顶部"
-    @click="scrollToTop"
-  >
-    <VueIcon icon="lucide:arrow-up" />
-  </button>
+  <!-- 单根节点：承接 Astro transition:persist 落下的 attribute，避免 fragment/Teleport 警告 -->
+  <div class="contents">
+    <!-- 回到顶部 -->
+    <button
+      v-show="showBackToTop"
+      type="button"
+      class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:opacity-80 transition-all duration-200 text-white bg-primary-500 dark:bg-primary-400"
+      aria-label="回到顶部"
+      @click="scrollToTop"
+    >
+      <VueIcon icon="lucide:arrow-up" />
+    </button>
 
-  <!-- 图片灯箱 -->
-  <Teleport to="body">
-    <Transition name="lightbox">
-      <div v-if="lightboxVisible" class="lightbox-overlay" @click="closeLightbox">
-        <img :src="lightboxSrc" :alt="lightboxAlt" class="lightbox-image" @click.stop />
-        <button type="button" class="lightbox-close" aria-label="关闭" @click="closeLightbox">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </Transition>
-  </Teleport>
+    <!-- 灯箱仅客户端挂载后再 Teleport，避免 SSR 与 Transition 水合冲突 -->
+    <Teleport v-if="mounted" to="body">
+      <Transition name="lightbox">
+        <div v-if="lightboxVisible" class="lightbox-overlay" @click="closeLightbox">
+          <img :src="lightboxSrc" :alt="lightboxAlt" class="lightbox-image" @click.stop />
+          <button type="button" class="lightbox-close" aria-label="关闭" @click="closeLightbox">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import VueIcon from '../ui/VueIcon.vue';
 
+const mounted = ref(false);
 const showBackToTop = ref(false);
 
 const lightboxVisible = ref(false);
@@ -181,6 +185,7 @@ function onPageLoad() {
 }
 
 onMounted(() => {
+  mounted.value = true;
   onPageLoad();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
