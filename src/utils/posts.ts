@@ -1,5 +1,9 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
+export type { SeriesListItem } from './series';
+export { getSeriesHref } from './series';
+import type { SeriesListItem } from './series';
+
 export type BlogPost = CollectionEntry<'blog'>;
 
 /** 已发布文章（统一过滤 draft，草稿不会出现在列表/归档/静态路径中） */
@@ -116,16 +120,6 @@ export function getSeriesNames(posts: BlogPost[]): string[] {
     posts.map((post) => post.data.series).filter((s): s is string => Boolean(s))
   );
   return Array.from(names).sort();
-}
-
-export type SeriesListItem = {
-  name: string;
-  count: number;
-};
-
-/** 系列详情页路径（编码中文 / 空格等） */
-export function getSeriesHref(series: string): string {
-  return `/blog/series/${encodeURIComponent(series)}`;
 }
 
 /**

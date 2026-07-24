@@ -120,7 +120,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { siteConfig } from '@/config/site';
-import type { SeriesListItem } from '@/utils/posts';
+import type { SeriesListItem } from '@/utils/series';
 import VueIcon from '../ui/VueIcon.vue';
 import VueSearch from '../search/VueSearch.vue';
 import HeaderSeriesLinks from './HeaderSeriesLinks.vue';

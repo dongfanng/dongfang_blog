@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import type { SeriesListItem } from '@/utils/posts';
-import { getSeriesHref } from '@/utils/posts';
+import type { SeriesListItem } from '@/utils/series';
+import { getSeriesHref } from '@/utils/series';
 
 defineProps<{
   seriesList: SeriesListItem[];
