@@ -41,6 +41,7 @@ export const siteConfig = {
   nav: [
     { title: '首页', href: '/' },
     { title: '文章', href: '/blog' },
+    { title: '系列', href: '/blog/series', dropdown: 'series' },
     { title: '归档', href: '/archive' },
     { title: '关于', href: '/about' },
   ],

@@ -6,15 +6,18 @@ import VueClickEffect from '@/components/ui/VueClickEffect.vue';
 import VueConsoleEasterEgg from '@/components/ui/VueConsoleEasterEgg.vue';
 import '@/styles/global.css';
 import type { SEOProps } from '@/utils/seo';
+import { getPublishedPosts, getSeriesList } from '@/utils/posts';
 
 interface Props extends SEOProps {}
+
+const seriesList = getSeriesList(await getPublishedPosts());
 ---
 
 <!DOCTYPE html>
 <html lang="zh-CN" transition:animate="none">
   <BaseHead {...Astro.props} />
   <body class="min-h-screen flex flex-col pt-16">
-    <VueHeader client:load transition:persist="site-header" />
+    <VueHeader {seriesList} client:load transition:persist="site-header" transition:persist-props />
     <div class="flex flex-1 flex-col" transition:name="page-content">
       <main class="flex-1">
         <slot />
