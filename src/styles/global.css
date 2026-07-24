@@ -8,13 +8,14 @@
  * 1) 旧正文用 CSS 短淡出（与 fetch 并行），截图前已透明，不会把 Hero 带进 VT 旧快照
  * 2) 新正文 VT page-in 淡入上移
  * 顶栏 persist，不参与这套动画。
+ * 根层/组背景跟主题走，避免深色模式淡出时露出白底。
  */
+::view-transition {
+  background-color: var(--page-bg);
+}
 ::view-transition-group(page-content) {
   animation: none !important;
-  background-color: var(--color-white, #fff);
-}
-html.dark ::view-transition-group(page-content) {
-  background-color: var(--color-gray-900, #111827);
+  background-color: var(--page-bg);
 }
 ::view-transition-old(page-content) {
   animation: none !important;
@@ -75,8 +76,15 @@ html.dark ::view-transition-group(page-content) {
 
 @layer base {
   html {
+    --page-bg: #fff;
+    color-scheme: light;
+    background-color: var(--page-bg);
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
+  }
+  html.dark {
+    --page-bg: var(--color-gray-900, #111827);
+    color-scheme: dark;
   }
 
   /* 强制经典滚动条,使 scrollbar-gutter: stable 在 macOS 上生效 */
@@ -97,6 +105,7 @@ html.dark ::view-transition-group(page-content) {
 
   body {
     @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    background-color: var(--page-bg);
   }
 
   .prose {
