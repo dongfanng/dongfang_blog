@@ -22,7 +22,7 @@
 
 | 页面/组件 | 文件 | 容器类 | 垂直 padding |
 |---|---|---|---|
-| Header | `src/components/layout/VueHeader.vue` | `container-prose` | 无（自身 h-16） |
+| Header | `src/components/layout/SiteHeader.astro` | `container-prose` | 无（自身 h-16） |
 | Footer | `src/components/layout/Footer.astro` | `container-prose` | `py-12` |
 | 首页 | `src/pages/index.astro` | `container-prose` | `py-12` |
 | 博客列表 | `src/pages/blog/index.astro` | `container-prose` | `py-12` |
@@ -51,7 +51,7 @@
       <!-- 页脚：相关文章；评论在 article 外 -->
       <section>相关文章</section>
     </article>
-    <VueComments />
+    <Comments />
   </div>
 
   <!-- Series：正文左侧，仅当文章属于系列时显示 -->

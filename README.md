@@ -88,8 +88,7 @@ npm run preview
 │       ├── last-modified.ts # git 最后修改时间
 │       ├── posts.ts         # 文章处理
 │       └── seo.ts           # SEO（基于 siteConfig）
-├── astro.config.mjs         # Astro 配置
-├── tailwind.config.mjs      # Tailwind 配置
+├── astro.config.mjs         # Astro 配置（含 Tailwind Vite 插件）
 ├── tsconfig.json            # TypeScript 配置
 └── package.json
 ```

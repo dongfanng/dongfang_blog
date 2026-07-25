@@ -68,8 +68,8 @@ const readingTime = getReadingTime(post.body);
                 src={image}
                 alt={title}
                 class="w-full aspect-video md:h-full object-cover rounded-lg"
-                widths={[240, 360]}
-                sizes="240px"
+                widths={[480, 800]}
+                sizes="(max-width: 768px) 100vw, 240px"
                 loading={priority ? 'eager' : 'lazy'}
                 fetchpriority={priority ? 'high' : 'auto'}
               />

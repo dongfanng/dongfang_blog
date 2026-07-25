@@ -33,55 +33,12 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
         root.classList.toggle('dark', getTheme() === 'dark');
       }
       applyTheme(document.documentElement);
-      // 必须在 swap 前写入新文档，否则过渡动画会先露出亮色 SSR HTML
+      // swap 前写入新文档，避免默认淡入淡出露出亮色 SSR HTML
       document.addEventListener('astro:before-swap', (event) => {
         applyTheme(event.newDocument.documentElement);
-        // 换页滚动用瞬间定位，避免 smooth 把旧页先滚回顶部露出 Hero
-        event.newDocument.documentElement.style.scrollBehavior = 'auto';
       });
       document.addEventListener('astro:after-swap', () => {
         applyTheme(document.documentElement);
-      });
-      // 旧正文短淡出（与 fetch 并行），完成后再进入 VT，避免硬切
-      document.addEventListener('astro:before-preparation', (event) => {
-        document.documentElement.style.scrollBehavior = 'auto';
-        const shell = document.getElementById('page-shell');
-        shell?.setAttribute('data-leaving', '');
-
-        const clearLeaving = () => {
-          document.getElementById('page-shell')?.removeAttribute('data-leaving');
-          document.documentElement.style.scrollBehavior = '';
-        };
-        event.signal?.addEventListener('abort', clearLeaving, { once: true });
-
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const waitForFadeOut = () => new Promise((resolve) => {
-          if (!shell || reduceMotion || event.signal?.aborted) {
-            resolve();
-            return;
-          }
-          let settled = false;
-          const done = () => {
-            if (settled) return;
-            settled = true;
-            shell.removeEventListener('transitionend', onEnd);
-            resolve();
-          };
-          const onEnd = (e) => {
-            if (e.target === shell && e.propertyName === 'opacity') done();
-          };
-          shell.addEventListener('transitionend', onEnd);
-          setTimeout(done, 120);
-        });
-
-        const originalLoader = event.loader;
-        event.loader = async () => {
-          await Promise.all([waitForFadeOut(), originalLoader()]);
-        };
-      });
-      document.addEventListener('astro:page-load', () => {
-        document.documentElement.style.scrollBehavior = '';
-        document.getElementById('page-shell')?.removeAttribute('data-leaving');
       });
     })();
   </script>
@@ -108,6 +65,5 @@ const pageImage = image ? `${siteUrl}${image}` : undefined;
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml">
-  {import.meta.env.PROD && <link rel="modulepreload" href="/pagefind/pagefind.js" />}
   <ViewTransitions />
 </head>

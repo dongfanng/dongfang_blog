@@ -7,7 +7,7 @@
              dark:bg-white/5 dark:hover:bg-white/10"
     >
       <VueIcon
-        icon="lucide:search"
+        icon="search"
         class="absolute text-[1.25rem] pointer-events-none ml-3 my-auto text-black/30 dark:text-white/30 transition-colors"
       />
       <input
@@ -30,7 +30,7 @@
       class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
       aria-label="搜索文章"
     >
-      <VueIcon icon="lucide:search" class="text-[1.25rem] text-gray-600 dark:text-gray-300" />
+      <VueIcon icon="search" class="text-[1.25rem] text-gray-600 dark:text-gray-300" />
     </button>
 
     <!-- 搜索面板（浮动下拉，仿 Firefly） -->
@@ -48,7 +48,7 @@
                dark:bg-white/5 dark:hover:bg-white/10 dark:focus-within:bg-white/10"
       >
         <VueIcon
-          icon="lucide:search"
+          icon="search"
           class="absolute text-[1.25rem] pointer-events-none ml-3 my-auto text-black/30 dark:text-white/30"
         />
         <input
@@ -78,7 +78,7 @@
           >
             <div class="inline-flex font-bold text-black/90 dark:text-white/90 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
               <span v-html="item.meta.title"></span>
-              <VueIcon icon="lucide:chevron-right" class="text-[0.75rem] translate-x-1 my-auto text-primary-600 dark:text-primary-400" />
+              <VueIcon icon="chevron-right" class="text-[0.75rem] translate-x-1 my-auto text-primary-600 dark:text-primary-400" />
             </div>
             <div v-if="item.excerpt && item.excerpt.includes('<mark>')" class="text-sm text-black/50 dark:text-white/50 flex items-start mt-0.5">
               <span v-html="item.excerpt"></span>
@@ -124,7 +124,8 @@ const desktopInputRef = ref<HTMLInputElement | null>(null);
 const mobileInputRef = ref<HTMLInputElement | null>(null);
 const searchContainer = ref<HTMLElement | null>(null);
 
-let debounceTimer: NodeJS.Timeout | null = null;
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+let pagefindLoading: Promise<void> | null = null;
 
 // 开发模式的文章数据
 const devPosts: SearchResult[] = [
@@ -153,6 +154,32 @@ function getCurrentKeyword(): string {
   return desktopQuery.value || mobileQuery.value;
 }
 
+async function ensurePagefind() {
+  if (!import.meta.env.PROD) {
+    initialized.value = true;
+    return;
+  }
+  if ((window as any).pagefind) {
+    initialized.value = true;
+    return;
+  }
+  if (!pagefindLoading) {
+    pagefindLoading = (async () => {
+      try {
+        const loader = (window as any).__loadPagefind;
+        if (typeof loader === 'function') {
+          await loader();
+        }
+      } catch (error) {
+        console.warn('Pagefind failed to load:', error);
+      } finally {
+        initialized.value = true;
+      }
+    })();
+  }
+  await pagefindLoading;
+}
+
 async function performSearch() {
   const kw = getCurrentKeyword().trim();
   currentQuery.value = kw;
@@ -161,14 +188,12 @@ async function performSearch() {
     isSearching.value = false;
     return;
   }
-  if (!initialized.value) {
-    isSearching.value = false;
-    return;
-  }
 
   isSearching.value = true;
 
   try {
+    await ensurePagefind();
+
     let searchResults: SearchResult[] = [];
 
     if (import.meta.env.PROD && (window as any).pagefind) {
@@ -223,10 +248,12 @@ function handleInput() {
 
 function onDesktopFocus() {
   showPanel();
+  void ensurePagefind();
 }
 
 function showPanel() {
   panelVisible.value = true;
+  void ensurePagefind();
 }
 
 function hidePanel() {
@@ -279,28 +306,15 @@ function handleGlobalKeydown(e: KeyboardEvent) {
 }
 
 function initialize() {
-  initialized.value = true;
-  const kw = getCurrentKeyword();
-  if (kw) {
-    performSearch();
+  if (!import.meta.env.PROD) {
+    initialized.value = true;
   }
 }
 
 onMounted(() => {
   document.addEventListener('click', handleGlobalClick);
   document.addEventListener('keydown', handleGlobalKeydown);
-
-  if (import.meta.env.PROD) {
-    if ((window as any).pagefind) {
-      initialize();
-    } else {
-      window.addEventListener('pagefindready', initialize, { once: true });
-      window.addEventListener('pagefindloaderror', initialize, { once: true });
-    }
-  } else {
-    console.log('Development search mode enabled');
-    initialize();
-  }
+  initialize();
 });
 
 onUnmounted(() => {

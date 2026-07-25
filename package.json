@@ -12,8 +12,6 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.7",
     "@astrojs/vue": "^4.5.3",
-    "@iconify-json/lucide": "^1.2.118",
-    "@iconify/vue": "^5.0.1",
     "@tailwindcss/vite": "^4.3.2",
     "astro": "^4.15.0",
     "rehype-external-links": "^3.0.0",

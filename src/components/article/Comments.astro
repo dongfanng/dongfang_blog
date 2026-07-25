@@ -1,0 +1,97 @@
+---
+import { siteConfig } from '@/config/site';
+import Icon from '@/components/ui/Icon.astro';
+
+const { repo, repoId, category, categoryId } = siteConfig.comment;
+const enabled = !!(repoId && categoryId);
+---
+
+{enabled && (
+  <section class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800" data-comments>
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">评论</h2>
+    <div class="flex justify-center py-4" data-comments-trigger>
+      <button
+        type="button"
+        class="inline-flex items-center gap-2 px-4 h-11 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        data-load-comments
+        data-repo={repo}
+        data-repo-id={repoId}
+        data-category={category}
+        data-category-id={categoryId}
+      >
+        <Icon name="message-circle" class="text-[1.25rem] w-[1.25rem] h-[1.25rem]" />
+        查看评论
+      </button>
+    </div>
+    <div class="giscus hidden" data-giscus-container></div>
+  </section>
+)}
+
+<script>
+  function getGiscusTheme() {
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  }
+
+  function updateGiscusTheme() {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    iframe?.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme: getGiscusTheme() } } },
+      'https://giscus.app',
+    );
+  }
+
+  function loadComments(btn: HTMLButtonElement) {
+    const section = btn.closest('[data-comments]');
+    if (!section || section.getAttribute('data-loaded') === '1') return;
+
+    const container = section.querySelector('[data-giscus-container]');
+    const trigger = section.querySelector('[data-comments-trigger]');
+    if (!(container instanceof HTMLElement)) return;
+
+    section.setAttribute('data-loaded', '1');
+    trigger?.classList.add('hidden');
+    container.classList.remove('hidden');
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', btn.dataset.repo || '');
+    script.setAttribute('data-repo-id', btn.dataset.repoId || '');
+    script.setAttribute('data-category', btn.dataset.category || '');
+    script.setAttribute('data-category-id', btn.dataset.categoryId || '');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '1');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', getGiscusTheme());
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function bindComments() {
+    document.querySelectorAll<HTMLButtonElement>('[data-load-comments]').forEach((btn) => {
+      if (btn.dataset.bound === '1') return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', () => loadComments(btn));
+    });
+  }
+
+  let themeObserver: MutationObserver | null = null;
+
+  function initComments() {
+    bindComments();
+    if (!themeObserver) {
+      themeObserver = new MutationObserver(() => updateGiscusTheme());
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initComments);
+  initComments();
+</script>

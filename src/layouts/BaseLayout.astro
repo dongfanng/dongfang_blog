@@ -1,9 +1,7 @@
 ---
 import BaseHead from '@/components/layout/BaseHead.astro';
-import VueHeader from '@/components/layout/VueHeader.vue';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
 import Footer from '@/components/layout/Footer.astro';
-import VueClickEffect from '@/components/ui/VueClickEffect.vue';
-import VueConsoleEasterEgg from '@/components/ui/VueConsoleEasterEgg.vue';
 import '@/styles/global.css';
 import type { SEOProps } from '@/utils/seo';
 import { getPublishedPosts, getSeriesList } from '@/utils/posts';
@@ -14,38 +12,25 @@ const seriesList = getSeriesList(await getPublishedPosts());
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN" transition:animate="none">
+<html lang="zh-CN">
   <BaseHead {...Astro.props} />
   <body class="min-h-screen flex flex-col pt-16">
-    <VueHeader {seriesList} client:load transition:persist="site-header" transition:persist-props />
-    {/* 具名过渡只做「新页淡入」；旧页在准备阶段已隐藏，不会闪首页 Hero */}
-    <div id="page-shell" class="flex flex-1 flex-col" transition:name="page-content">
-      <main class="flex-1">
-        <slot />
-      </main>
-      <Footer />
-    </div>
-    {/* 避免 client:only：dev + View Transitions 会为此隐藏 iframe 预热，换页约卡 1s */}
-    <VueClickEffect client:load transition:persist="click-effect" />
-    <VueConsoleEasterEgg client:idle transition:persist="console-egg" />
+    <SiteHeader {seriesList} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
 
 {import.meta.env.PROD && (
 <script is:inline>
-  if (!window.pagefind) {
-    async function loadPagefind() {
-      try {
-        const pagefind = await import('/pagefind/pagefind.js');
-        await pagefind.options({ "excerptLength": 20 });
-        window.pagefind = pagefind;
-        window.dispatchEvent(new Event('pagefindready'));
-      } catch (error) {
-        console.warn("Pagefind failed to load:", error);
-        window.dispatchEvent(new Event('pagefindloaderror'));
-      }
-    }
-    loadPagefind();
-  }
+  window.__loadPagefind = async function () {
+    if (window.pagefind) return window.pagefind;
+    const pagefind = await import('/pagefind/pagefind.js');
+    await pagefind.options({ excerptLength: 20 });
+    window.pagefind = pagefind;
+    return pagefind;
+  };
 </script>
 )}

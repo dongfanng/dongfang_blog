@@ -27,7 +27,7 @@ export const siteConfig = {
     /** 横幅壁纸配置 */
     banner: {
       /** 背景图片文件名（位于 src/assets/images/ 目录下） */
-      image: 'blog-banner.jpg',
+      image: 'blog-banner-lossy.jpg',
       /** 是否显示遮罩 */
       overlay: true,
       /** 遮罩透明度 (0-1) */

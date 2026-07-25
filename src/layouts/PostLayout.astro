@@ -5,8 +5,7 @@ import { siteConfig } from '@/config/site';
 import Icon from '@/components/ui/Icon.astro';
 import { Image } from 'astro:assets';
 import TableOfContents from '@/components/article/TableOfContents.astro';
-import VuePostEnhancements from '@/components/article/VuePostEnhancements.vue';
-import VueComments from '@/components/article/VueComments.vue';
+import Comments from '@/components/article/Comments.astro';
 import SeriesNav from '@/components/article/SeriesNav.astro';
 import type { BlogPost, SeriesNav as SeriesNavData } from '@/utils/posts';
 import { getReadingTime, getWordCount, getSeriesHref } from '@/utils/posts';
@@ -27,9 +26,6 @@ const wordCount = getWordCount(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
-  {/* client:load 而非 client:only：dev 下 VT 会对 client:only 开隐藏 iframe 并最多空等 ~1s */}
-  <VuePostEnhancements client:load transition:persist="post-enhancements" />
-
   <div class="container-prose py-8">
     <article>
     <header class="mb-8">
@@ -108,7 +104,7 @@ const wordCount = getWordCount(post.body);
       )
     )}
 
-    <div class="prose dark:prose-invert max-w-none">
+    <div class="prose max-w-none">
       <slot />
     </div>
 
@@ -119,11 +115,11 @@ const wordCount = getWordCount(post.body);
         rel="noopener noreferrer"
         class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors inline-flex items-center gap-1.5"
       >
-        <Icon name="lucide:square-pen" class="w-4 h-4" />
+        <Icon name="square-pen" class="w-4 h-4" />
         在 GitHub 上编辑此页
       </a>
       <span class="inline-flex items-center gap-1.5">
-        <Icon name="lucide:clock" class="w-4 h-4" />
+        <Icon name="clock" class="w-4 h-4" />
         最后更新于: {formatDateTime(updatedDate || pubDate)}
       </span>
     </div>
@@ -149,7 +145,7 @@ const wordCount = getWordCount(post.body);
       </section>
     )}
     </article>
-    <VueComments client:visible />
+    <Comments />
   </div>
 
   {seriesNav && (
@@ -168,4 +164,59 @@ const wordCount = getWordCount(post.body);
     </aside>
   )}
 
+  <button
+    type="button"
+    id="back-to-top"
+    hidden
+    class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg hover:opacity-80 transition-all duration-200 text-white bg-primary-500 dark:bg-primary-400"
+    aria-label="回到顶部"
+  >
+    <Icon name="arrow-up" class="w-5 h-5" />
+  </button>
+
+  <script>
+    import '@/scripts/post-enhancements';
+  </script>
 </BaseLayout>
+
+<style is:global>
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  backdrop-filter: blur(4px);
+}
+.lightbox-overlay[hidden] {
+  display: none;
+}
+.lightbox-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  cursor: default;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+</style>

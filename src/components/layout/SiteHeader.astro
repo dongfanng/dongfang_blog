@@ -1,0 +1,179 @@
+---
+import { siteConfig } from '@/config/site';
+import type { SeriesListItem } from '@/utils/series';
+import { getSeriesHref } from '@/utils/series';
+import VueSearch from '@/components/search/VueSearch.vue';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  seriesList: SeriesListItem[];
+}
+
+const { seriesList } = Astro.props;
+
+const desktopLinkClass =
+  'hidden sm:inline-flex h-11 items-center text-gray-600 transition-colors hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-gray-900';
+
+const mobileLinkClass =
+  'block rounded-lg px-3 py-2.5 text-gray-600 transition-colors hover:bg-gray-100 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400';
+
+const seriesLinkClass =
+  'flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400';
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+  <div class="container-prose">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="text-xl font-bold text-gray-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+        {siteConfig.name}
+      </a>
+
+      <nav class="flex items-center gap-3">
+        {siteConfig.nav.map((item) =>
+          'dropdown' in item ? (
+            <div class="group relative hidden sm:block">
+              <a href={item.href} class={`${desktopLinkClass} gap-1`}>
+                {item.title}
+                <Icon name="chevron-down" class="text-sm w-[1em] h-[1em] transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+              </a>
+              <div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div class="rounded-xl border border-gray-200 bg-white/95 p-2 shadow-xl backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95">
+                  <a href="/blog/series" class={seriesLinkClass}>
+                    <span class="font-medium text-gray-700 dark:text-gray-200">全部系列</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500">{seriesList.length}</span>
+                  </a>
+                  {seriesList.length > 0 && <div class="my-1 border-t border-gray-100 dark:border-gray-800" />}
+                  {seriesList.map((series) => (
+                    <a href={getSeriesHref(series.name)} class={seriesLinkClass}>
+                      <span class="truncate">{series.name}</span>
+                      <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500">{series.count} 篇</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a href={item.href} class={desktopLinkClass}>
+              {item.title}
+            </a>
+          )
+        )}
+
+        <VueSearch client:idle />
+
+        <button
+          type="button"
+          id="theme-toggle"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label="切换主题"
+        >
+          <Icon name="sun" class="text-[1.25rem] w-[1.25rem] h-[1.25rem] text-yellow-500 hidden dark:block" />
+          <Icon name="moon" class="text-[1.25rem] w-[1.25rem] h-[1.25rem] text-gray-600 dark:text-gray-400 block dark:hidden" />
+        </button>
+
+        <button
+          type="button"
+          id="mobile-menu-toggle"
+          class="sm:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label="菜单"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <Icon id="icon-menu" name="menu" class="text-[1.25rem] w-[1.25rem] h-[1.25rem] text-gray-600 dark:text-gray-300" />
+          <Icon id="icon-close" name="x" class="hidden text-[1.25rem] w-[1.25rem] h-[1.25rem] text-gray-600 dark:text-gray-300" />
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="hidden sm:hidden border-t border-gray-200 dark:border-gray-800">
+    <div class="container-prose py-2">
+      {siteConfig.nav.map((item) =>
+        'dropdown' in item ? (
+          <div>
+            <button
+              type="button"
+              id="mobile-series-toggle"
+              class={`${mobileLinkClass} flex w-full items-center justify-between`}
+              aria-expanded="false"
+              aria-controls="mobile-series-menu"
+            >
+              <span>{item.title}</span>
+              <Icon id="mobile-series-chevron" name="chevron-down" class="text-base w-[1em] h-[1em] transition-transform" />
+            </button>
+            <div id="mobile-series-menu" class="hidden ml-3 border-l border-gray-200 py-1 pl-3 dark:border-gray-700">
+              <a href="/blog/series" class={seriesLinkClass} data-close-mobile>
+                <span class="font-medium text-gray-700 dark:text-gray-200">全部系列</span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">{seriesList.length}</span>
+              </a>
+              {seriesList.length > 0 && <div class="my-1 border-t border-gray-100 dark:border-gray-800" />}
+              {seriesList.map((series) => (
+                <a href={getSeriesHref(series.name)} class={seriesLinkClass} data-close-mobile>
+                  <span class="truncate">{series.name}</span>
+                  <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500">{series.count} 篇</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a href={item.href} class={mobileLinkClass} data-close-mobile>
+            {item.title}
+          </a>
+        )
+      )}
+    </div>
+  </div>
+</header>
+
+<script>
+  function bindHeader() {
+    const themeToggle = document.getElementById('theme-toggle');
+    if (!themeToggle || themeToggle.dataset.bound === '1') return;
+    themeToggle.dataset.bound = '1';
+
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconMenu = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+    const seriesToggle = document.getElementById('mobile-series-toggle');
+    const seriesMenu = document.getElementById('mobile-series-menu');
+    const seriesChevron = document.getElementById('mobile-series-chevron');
+
+    themeToggle.addEventListener('click', () => {
+      const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      document.documentElement.classList.toggle('dark', next === 'dark');
+    });
+
+    const setMobileOpen = (open: boolean) => {
+      mobileMenu?.classList.toggle('hidden', !open);
+      menuToggle?.setAttribute('aria-expanded', String(open));
+      iconMenu?.classList.toggle('hidden', open);
+      iconClose?.classList.toggle('hidden', !open);
+      if (!open) {
+        seriesMenu?.classList.add('hidden');
+        seriesToggle?.setAttribute('aria-expanded', 'false');
+        seriesChevron?.classList.remove('rotate-180');
+      }
+    };
+
+    menuToggle?.addEventListener('click', () => {
+      const open = menuToggle.getAttribute('aria-expanded') !== 'true';
+      setMobileOpen(open);
+    });
+
+    seriesToggle?.addEventListener('click', () => {
+      const open = seriesToggle.getAttribute('aria-expanded') !== 'true';
+      seriesToggle.setAttribute('aria-expanded', String(open));
+      seriesMenu?.classList.toggle('hidden', !open);
+      seriesChevron?.classList.toggle('rotate-180', open);
+    });
+
+    document.querySelectorAll('[data-close-mobile]').forEach((el) => {
+      el.addEventListener('click', () => setMobileOpen(false));
+    });
+  }
+
+  document.addEventListener('astro:page-load', bindHeader);
+  bindHeader();
+</script>
