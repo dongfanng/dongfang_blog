@@ -108,12 +108,12 @@ const wordCount = getWordCount(post.body);
       <slot />
     </div>
 
-    <div class="mt-6 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+    <div class="mt-6 flex items-center justify-end sm:justify-between text-sm text-gray-500 dark:text-gray-400">
       <a
         href={`${siteConfig.social.github}/edit/main/src/content/blog/${post.slug}.md`}
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors inline-flex items-center gap-1.5"
+        class="hidden sm:inline-flex hover:text-primary-500 dark:hover:text-primary-400 transition-colors items-center gap-1.5"
       >
         <Icon name="square-pen" class="w-4 h-4" />
         在 GitHub 上编辑此页
