@@ -9,6 +9,7 @@ import Comments from '@/components/article/Comments.astro';
 import SeriesNav from '@/components/article/SeriesNav.astro';
 import type { BlogPost, SeriesNav as SeriesNavData } from '@/utils/posts';
 import { getReadingTime, getWordCount, getSeriesHref } from '@/utils/posts';
+import 'katex/dist/katex.min.css';
 
 interface Props {
   post: BlogPost;
@@ -177,6 +178,11 @@ const wordCount = getWordCount(post.body);
   <script>
     import '@/scripts/post-enhancements';
   </script>
+
+  <!-- 静态引入（脚本内部会检测是否存在 mermaid 块，无则直接跳过，mermaid 库按需动态加载） -->
+  <script>
+    import '@/scripts/mermaid';
+  </script>
 </BaseLayout>
 
 <style is:global>
@@ -218,5 +224,82 @@ const wordCount = getWordCount(post.body);
 }
 .lightbox-close:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+/* Mermaid 图表水平居中；svg 超宽时容器可横向滚动 */
+.mermaid-container {
+  position: relative;
+  text-align: center;
+}
+.mermaid-container svg {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}
+/* 放大按钮：hover 显示 */
+.mermaid-zoom-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  z-index: 2;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(100 116 139);
+  background-color: rgb(255 255 255 / 0.8);
+  border: 1px solid rgb(229 231 235);
+  border-radius: 0.375rem;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+.mermaid-zoom-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+.mermaid-container:hover .mermaid-zoom-btn,
+.mermaid-zoom-btn:focus-visible {
+  opacity: 1;
+}
+.dark .mermaid-zoom-btn {
+  color: rgb(148 163 184);
+  background-color: rgb(31 41 55 / 0.8);
+  border-color: rgb(55 65 81);
+}
+/* 全屏查看器 */
+.mermaid-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgb(0 0 0 / 0.9);
+  cursor: zoom-out;
+}
+.mermaid-lightbox svg {
+  width: auto !important;
+  height: auto !important;
+  max-width: min(95vw, 100%) !important;
+  max-height: 90vh !important;
+}
+.mermaid-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+.mermaid-lightbox-close:hover {
+  background: rgb(255 255 255 / 0.2);
 }
 </style>

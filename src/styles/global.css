@@ -203,7 +203,7 @@
   pre {
     position: relative;
     border-radius: 0.5rem;
-    padding: 2.75rem 1rem 1rem 1rem;
+    padding: 2rem 1rem 1rem 1rem;
     overflow-x: auto;
     max-width: 100%;
     min-width: 0;
@@ -220,13 +220,13 @@
   .code-block-wrapper[data-code-language]:not([data-code-language=""])::before {
     content: attr(data-code-language);
     position: absolute;
-    top: 0.5rem;
+    top: 0.25rem;
     left: 0.5rem;
-    height: 2rem;
-    padding: 0 0.5rem;
+    height: 1.5rem;
+    padding: 0 0.375rem;
     display: inline-flex;
     align-items: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-family: ui-monospace, SFMono-Regular, monospace;
     color: rgb(100 116 139);
     background-color: rgba(0, 0, 0, 0.04);
@@ -250,9 +250,9 @@
   figcaption[data-rehype-pretty-code-title] {
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 0.875rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    font-size: 0.8125rem;
     color: rgb(75 85 99);
     background-color: rgb(243 244 246);
     border-top-left-radius: 0.5rem;

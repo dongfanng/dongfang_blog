@@ -2,6 +2,8 @@ import { defineConfig } from 'astro/config';
 import path from 'path';
 import vue from '@astrojs/vue';
 import sitemap from '@astrojs/sitemap';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeExternalLinks from 'rehype-external-links';
 import tailwindcss from '@tailwindcss/vite';
@@ -28,11 +30,17 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
+    remarkPlugins: [remarkMath],
     rehypePlugins: [
       [rehypeExternalLinks, {
         target: '_blank',
         rel: ['noopener', 'noreferrer'],
         protocols: ['http', 'https'],
+      }],
+      // KaTeX 数学公式：remark-math 标记 $...$ / $$...$$，此处渲染为 HTML
+      [rehypeKatex, {
+        throwOnError: false,
+        output: 'html',
       }],
       [rehypePrettyCode, prettyCodeOptions],
     ],
