@@ -19,27 +19,3 @@ export function formatDate(
     day: 'numeric',
   });
 }
-
-/**
- * 格式化日期时间（YYYY/MM/DD HH:mm:ss，固定为 Asia/Shanghai）
- * @param date 日期对象或字符串
- * @returns 格式化后的日期时间字符串
- */
-export function formatDateTime(date: Date | string): string {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: SITE_TIME_ZONE,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).formatToParts(d);
-
-  const get = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((p) => p.type === type)?.value ?? '00';
-
-  return `${get('year')}/${get('month')}/${get('day')} ${get('hour')}:${get('minute')}:${get('second')}`;
-}
