@@ -6,6 +6,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
+    /** 最后更新时间（手动维护；未填写时文章页显示发布时间） */
     updatedDate: z.coerce.date().optional(),
     category: z.string(),
     tags: z.array(z.string()),

@@ -2,6 +2,7 @@
 title: 欢迎来到我的博客
 description: 这是博客的第一篇文章，介绍一下这个博客的技术栈和未来的写作计划。
 pubDate: 2026-07-18
+updatedDate: 2026-07-25
 category: 个人随笔
 tags: [博客, 公告]
 draft: false

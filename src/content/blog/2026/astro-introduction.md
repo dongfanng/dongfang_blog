@@ -2,6 +2,7 @@
 title: Astro 入门指南
 description: 介绍 Astro 的基本概念和使用方法，帮助你快速上手这个优秀的静态站点生成器。
 pubDate: 2026-07-19
+updatedDate: 2026-07-25
 category: 前端开发
 tags: [Astro, JavaScript, 静态站点]
 draft: false

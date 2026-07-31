@@ -16,7 +16,7 @@ interface Props {
   headings?: { depth: number; text: string; slug: string }[];
   related?: BlogPost[];
   seriesNav?: SeriesNavData | null;
-  /** 最后更新时间：frontmatter.updatedDate 或 git 提交时间 */
+  /** 最后更新时间：frontmatter.updatedDate（手动维护，未填写时显示发布时间） */
   updatedDate?: Date | null;
 }
 

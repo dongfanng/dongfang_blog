@@ -2,6 +2,7 @@
 title: 数学公式与流程图测试
 description: 验证 KaTeX 数学公式与 Mermaid 流程图渲染。
 pubDate: 2026-07-31
+updatedDate: 2026-07-31
 category: 前端开发
 tags: [测试, KaTeX, Mermaid]
 draft: false

@@ -1,7 +1,6 @@
 ---
 import PostLayout from '@/layouts/PostLayout.astro';
 import { getPublishedPosts, getRelatedPosts, getSeriesNav } from '@/utils/posts';
-import { getGitLastModified } from '@/utils/last-modified';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -17,8 +16,8 @@ const related = getRelatedPosts(post, posts);
 const seriesNav = getSeriesNav(post, posts);
 const { Content, headings } = await post.render();
 
-// 手动 updatedDate 优先，否则用 git 最后提交时间
-const updatedDate = post.data.updatedDate ?? getGitLastModified(post.id);
+// 最后更新时间由 frontmatter 手动维护；未填写时显示发布时间
+const updatedDate = post.data.updatedDate ?? null;
 ---
 
 <PostLayout {post} {related} {seriesNav} {headings} {updatedDate}>
