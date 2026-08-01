@@ -9,7 +9,7 @@ import Comments from '@/components/article/Comments.astro';
 import SeriesNav from '@/components/article/SeriesNav.astro';
 import type { BlogPost, SeriesNav as SeriesNavData } from '@/utils/posts';
 import { getReadingTime, getWordCount, getSeriesHref } from '@/utils/posts';
-import 'katex/dist/katex.min.css';
+import katexUrl from 'katex/dist/katex.min.css?url';
 
 interface Props {
   post: BlogPost;
@@ -24,9 +24,12 @@ const { post, headings = [], related, seriesNav = null, updatedDate = null } = A
 const { title, description, pubDate, category, tags, image } = post.data;
 const readingTime = getReadingTime(post.body);
 const wordCount = getWordCount(post.body);
+// 自动检测正文是否包含 KaTeX 数学公式（$$...$$ 或 $...$）
+const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
 ---
 
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
+  {hasMath && <link rel="stylesheet" href={katexUrl} />}
   <div class="container-prose py-8">
     <article>
     <header class="mb-8">

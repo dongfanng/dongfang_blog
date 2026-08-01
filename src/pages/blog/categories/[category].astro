@@ -8,11 +8,12 @@ export async function getStaticPaths() {
   const categories = getCategories(posts);
   return categories.map((category) => ({
     params: { category },
+    props: { posts },
   }));
 }
 
 const { category } = Astro.params;
-const posts = await getPublishedPosts();
+const { posts } = Astro.props;
 const categoryPosts = sortPosts(posts.filter((p) => p.data.category === category));
 ---
 

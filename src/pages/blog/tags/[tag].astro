@@ -8,11 +8,12 @@ export async function getStaticPaths() {
   const tags = getTags(posts);
   return tags.map((tag) => ({
     params: { tag },
+    props: { posts },
   }));
 }
 
 const { tag } = Astro.params;
-const posts = await getPublishedPosts();
+const { posts } = Astro.props;
 const tagPosts = sortPosts(posts.filter((p) => p.data.tags.includes(tag!)));
 ---
 
