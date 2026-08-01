@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build && pagefind --site dist",
+    "build": "astro build && pagefind --site dist",
+    "typecheck": "astro check",
     "preview": "astro preview",
     "astro": "astro"
   },

@@ -129,10 +129,10 @@ function setupCodeCopy() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className =
-      'copy-button absolute top-1 right-1 z-10 w-6 h-6 p-0 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer opacity-0 transition-opacity duration-200 flex items-center justify-center';
+      'copy-button absolute top-2 right-2 z-10 w-6 h-6 p-0 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer opacity-0 transition-opacity duration-200 flex items-center justify-center';
     button.setAttribute('aria-label', 'Copy code');
     button.innerHTML = `
-      <svg class="copy-icon w-3.5 h-3.5 text-gray-600 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="copy-icon w-3.5 h-3.5 text-gray-500 dark:text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
         <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
       </svg>
