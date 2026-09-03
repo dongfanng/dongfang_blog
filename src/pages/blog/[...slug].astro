@@ -15,7 +15,7 @@ const related = getRelatedPosts(post, posts);
 const seriesNav = getSeriesNav(post, posts);
 const { Content, headings } = await post.render();
 
-// 最后更新时间由 frontmatter 手动维护；未填写时显示发布时间
+// 透传 frontmatter 的 updatedDate；未手动填写时为 null，由渲染层决定如何展示
 const updatedDate = post.data.updatedDate ?? null;
 ---
 
