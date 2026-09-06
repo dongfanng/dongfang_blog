@@ -1,0 +1,39 @@
+---
+title: 向量检索与ANN索引
+description: 海量数据的向量检索：从精确最近邻到 ANN 近似最近邻，HNSW / IVF / 乘积量化（PQ）等索引结构。
+pubDate: 2026-09-03
+updatedDate: 2026-09-06
+category: 后端架构
+tags: [向量检索, ANN近似最近邻, HNSW算法, 乘积量化PQ, IVF倒排索引, RAG向量召回]
+draft: false
+sticky: 0
+# image: ""
+# series: ""
+# seriesOrder: 1
+---
+
+传统关系型数据库核心假设是存储的数据具有全序关系，用于构建 B+ 树或 LSM 树。
+
+如果不建立索引，暴力检索每次检索都需要与数据库中全部 N 个向量计算点积并排序，复杂度为 O(N x D)。
+
+绝对精确的最近邻搜索代价太高，实际业务允许少量误差，找到足够接近结果即可。
+
+近似最近邻搜索（Approximate Nearest Neighbor，简称 ANN）放弃了100%绝对召回，换取查询效率。
+
+ANN 索引历史上共衍生出四大流派，基于树、基于哈希、基于图和基于量化/倒排。前两者在高维空间中性能会急剧下降。现在生产落地主流派系是基于图和基于量化/倒排。
+
+分层可导航小世界图（Hierarchical Navigable Small World graphs，简称 HNSW）。全量向量和图拓扑全量放内存，速度优先。
+
+倒排文件索引（Inverted File Index，简称 IVF），对全量数据用 k-means 聚类生成 K 个聚类中心。每个向量分配给离它最近的中心，形成一个个倒排桶。检索时粗筛用查询向量与 K 个桶做比较，找出最接近的 N 个桶。精筛遍历这几个桶里的向量计算真实距离。但可能因聚类划分而漏掉桶边界处的数据。如果每个桶内存储的是全量原始向量，内存占用依旧较高。
+
+乘积量化（Product Quantization，简称 PQ），采用分算压缩和预计算查表。把高维向量切成 M 个子向量（如 128 维度切成16段，每段 8 维）。对每段数据聚类，分别找出 K 个中心点（通常为 256个，可以用一字节 uint8 储存）。将聚类结果拆为字典。下一步是有损压缩，将每段子向量与格式的码本对比，用距离最近的代号取代真实的向量。
+
+IVF + PQ，纯 IVF 内存降不下来，纯 PQ 由于精度丢失召回率受限。可以用 IFV 进行粗筛，在选中的桶内，用压缩编码和查表方式快速排出 TOP-K。若对精度要求高，再把初筛出来的候选集从磁盘上取回未压缩的原始向量做一次精确重排。
+
+
+
+> 参考链接：
+>
+> 1. [Hierarchical Navigable Small Worlds (HNSW) | Pinecone](https://www.pinecone.io/learn/series/faiss/hnsw/)
+> 2. [document_style.md](https://raw.githubusercontent.com/ryanxingql/blog/refs/heads/main/posts/document_style.md)
+
