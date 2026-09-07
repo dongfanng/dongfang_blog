@@ -3,7 +3,7 @@ title: "图床搭建：GitHub + PicGo + jsdelivr 方案"
 description: "记录一套免费可用的图床搭建方案：GitHub 仓库存图、PicGo 上传、jsdelivr 加速，并集成到 Typora 写作流程。后续会补充更多方案。"
 pubDate: 2026-09-07
 # updatedDate: 2026-09-07
-category: 前端开发
+category: 开发工具
 tags: [图床, GitHub, PicGo, jsdelivr, Typora]
 draft: false
 sticky: 0

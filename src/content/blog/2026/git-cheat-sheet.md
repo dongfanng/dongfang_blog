@@ -3,7 +3,7 @@ title: "Git 常用命令速查"
 description: "常用 Git 命令的速查笔记，覆盖基本流程、分支管理、版本回退、远程仓库、冲突处理等高频操作。"
 pubDate: 2026-09-07
 # updatedDate: 2026-09-07
-category: 前端开发
+category: 开发工具
 tags: [Git, 版本控制, 速查]
 draft: false
 sticky: 0
