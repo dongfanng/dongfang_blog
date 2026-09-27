@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPublishedPosts, getTags } from '@/utils/posts';
+
+const tags = getTags(await getPublishedPosts());
+---
+
+<BaseLayout title="标签" description={`浏览本站的 ${tags.length} 个文章标签。`}>
+  <div class="container-prose py-12">
+    <header class="mb-8">
+      <a href="/blog" class="text-primary-500 dark:text-primary-400 hover:underline mb-2 inline-block">
+        ← 返回文章列表
+      </a>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">文章标签</h1>
+      <p class="text-gray-600 dark:text-gray-400">共 {tags.length} 个标签</p>
+    </header>
+
+    <nav aria-label="文章标签" class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <a
+          href={`/blog/tags/${tag}`}
+          class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          #{tag}
+        </a>
+      ))}
+    </nav>
+  </div>
+</BaseLayout>

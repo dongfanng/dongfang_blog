@@ -23,7 +23,7 @@ export const siteConfig = {
   /** 首页配置 */
   home: {
     /** 首页显示的最新文章数量 */
-    recentPostsCount: 6,
+    recentPostsCount: 4,
     /** 横幅壁纸配置 */
     banner: {
       /** 背景图片文件名（位于 src/assets/images/ 目录下） */

@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ArticleCard from '@/components/article/ArticleCard.astro';
-import { getPublishedPosts, sortPosts, getCategories, getTags } from '@/utils/posts';
+import { getPublishedPosts, sortPosts, getCategories } from '@/utils/posts';
 
 const posts = await getPublishedPosts();
 const sortedPosts = sortPosts(posts);
 const categories = getCategories(posts);
-const tags = getTags(posts);
 ---
 
 <BaseLayout title="文章">
@@ -16,42 +15,23 @@ const tags = getTags(posts);
       <p class="text-gray-600 dark:text-gray-400">共 {sortedPosts.length} 篇文章</p>
     </header>
 
-    <!-- 筛选器 -->
-    <div class="mb-8 flex flex-wrap gap-4">
-      <details class="group">
-        <summary class="cursor-pointer px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
-          分类
-        </summary>
-        <div class="mt-2 p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-          <div class="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <a
-                href={`/blog/categories/${category}`}
-                class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              >
-                {category}
-              </a>
-            ))}
-          </div>
-        </div>
-      </details>
-      <details class="group">
-        <summary class="cursor-pointer px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
-          标签
-        </summary>
-        <div class="mt-2 p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-          <div class="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <a
-                href={`/blog/tags/${tag}`}
-                class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
-        </div>
-      </details>
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <nav aria-label="文章分类" class="flex flex-wrap gap-2">
+        <a href="/blog" aria-current="page" class="px-3 py-1.5 rounded-full text-sm font-medium bg-primary-50 text-primary-700 dark:bg-primary-950/50 dark:text-primary-300">
+          全部
+        </a>
+        {categories.map((category) => (
+          <a
+            href={`/blog/categories/${category}`}
+            class="px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
+            {category}
+          </a>
+        ))}
+      </nav>
+      <a href="/blog/tags" class="text-sm text-primary-500 dark:text-primary-400 hover:underline shrink-0">
+        浏览全部标签 →
+      </a>
     </div>
 
     <!-- 文章列表 -->
