@@ -54,7 +54,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ['/pagefind/pagefind.js'],
+        external: ['/search-index/pagefind.js'],
       },
     },
   },

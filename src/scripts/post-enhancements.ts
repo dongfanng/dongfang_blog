@@ -8,7 +8,13 @@ let scrollTicking = false;
 let bound = false;
 
 function ensureLightbox() {
-  if (lightboxEl) return lightboxEl;
+  if (lightboxEl) {
+    if (!lightboxEl.isConnected) {
+      lightboxEl.hidden = true;
+      document.body.appendChild(lightboxEl);
+    }
+    return lightboxEl;
+  }
   lightboxEl = document.createElement('div');
   lightboxEl.className = 'lightbox-overlay';
   lightboxEl.hidden = true;

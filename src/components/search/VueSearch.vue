@@ -126,6 +126,7 @@ const searchContainer = ref<HTMLElement | null>(null);
 
 let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 let pagefindLoading: Promise<void> | null = null;
+let searchVersion = 0;
 
 // 开发模式的文章数据
 const devPosts: SearchResult[] = [
@@ -181,6 +182,7 @@ async function ensurePagefind() {
 }
 
 async function performSearch() {
+  const version = searchVersion;
   const kw = getCurrentKeyword().trim();
   currentQuery.value = kw;
   if (!kw) {
@@ -220,16 +222,17 @@ async function performSearch() {
         }));
     }
 
-    results.value = searchResults;
+    if (version === searchVersion) results.value = searchResults;
   } catch (error) {
     console.error('Search error:', error);
-    results.value = [];
+    if (version === searchVersion) results.value = [];
   } finally {
-    isSearching.value = false;
+    if (version === searchVersion) isSearching.value = false;
   }
 }
 
 function handleInput() {
+  searchVersion++;
   const kw = getCurrentKeyword();
   if (kw.trim()) {
     showPanel();
@@ -261,6 +264,8 @@ function hidePanel() {
 }
 
 function closePanel() {
+  searchVersion++;
+  if (debounceTimer) clearTimeout(debounceTimer);
   hidePanel();
   desktopQuery.value = '';
   mobileQuery.value = '';
@@ -318,6 +323,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  searchVersion++;
+  if (debounceTimer) clearTimeout(debounceTimer);
   document.removeEventListener('click', handleGlobalClick);
   document.removeEventListener('keydown', handleGlobalKeydown);
 });

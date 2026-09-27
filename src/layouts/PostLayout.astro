@@ -31,7 +31,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
 <BaseLayout title={title} description={description} image={typeof image === 'string' ? image : image?.src} pubDate={pubDate} updatedDate={updatedDate ?? undefined} category={category} tags={tags}>
   {hasMath && <link rel="stylesheet" href={katexUrl} />}
   <div class="container-prose py-8">
-    <article>
+    <article data-pagefind-body>
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
         <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
@@ -129,7 +129,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
     </div>
 
     {related && related.length > 0 && (
-      <section class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+      <section data-pagefind-ignore class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">相关文章</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {related.map((p) => (

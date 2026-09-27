@@ -27,7 +27,7 @@ const seriesList = getSeriesList(await getPublishedPosts());
 <script is:inline>
   window.__loadPagefind = async function () {
     if (window.pagefind) return window.pagefind;
-    const pagefind = await import('/pagefind/pagefind.js');
+    const pagefind = await import('/search-index/pagefind.js');
     await pagefind.options({ excerptLength: 20 });
     window.pagefind = pagefind;
     return pagefind;

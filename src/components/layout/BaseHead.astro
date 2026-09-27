@@ -17,7 +17,7 @@ const {
 } = Astro.props;
 
 const pageTitle = buildTitle(title);
-const pageImage = image ? `${siteUrl}${image}` : undefined;
+const pageImage = image ? new URL(image, siteUrl).href : undefined;
 ---
 
 <head>
