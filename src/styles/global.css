@@ -207,6 +207,14 @@
     margin-bottom: 1.5rem;
   }
 
+  /* 代码块统一垂直间距：pre 无 figure 包裹时不再首尾相接 */
+  .prose .code-block-wrapper,
+  .prose > pre,
+  .prose .mermaid-container {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   pre {
     position: relative;
     border-radius: 0.5rem;
