@@ -1,6 +1,6 @@
 ---
 import type { SeriesNav } from '@/utils/posts';
-import { getSeriesHref } from '@/utils/posts';
+import { getSeriesHref, getPostHref } from '@/utils/posts';
 
 interface Props {
   seriesNav: SeriesNav;
@@ -60,7 +60,7 @@ const seriesHref = getSeriesHref(series);
             </span>
           ) : (
             <a
-              href={`/blog/${item.slug}`}
+              href={getPostHref(item.slug)}
               class:list={[
                 'flex items-start gap-1.5 text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors',
                 isAside ? 'py-0.5' : 'px-2 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/60',

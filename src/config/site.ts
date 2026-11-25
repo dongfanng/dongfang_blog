@@ -22,8 +22,8 @@ export const siteConfig = {
 
   /** 首页配置 */
   home: {
-    /** 首页显示的最新文章数量 */
-    recentPostsCount: 4,
+    /** 首页每页文章数量 */
+    postsPerPage: 10,
     /** 横幅壁纸配置 */
     banner: {
       /** 背景图片文件名（位于 src/assets/images/ 目录下） */
@@ -33,15 +33,14 @@ export const siteConfig = {
       /** 遮罩透明度 (0-1) */
       overlayOpacity: 0.5,
       /** 横幅高度 */
-      height: '500px',
+      height: '300px',
     },
   },
 
   /** 导航链接 */
   nav: [
     { title: '首页', href: '/' },
-    { title: '文章', href: '/blog' },
-    { title: '系列', href: '/blog/series', dropdown: 'series' },
+    { title: '系列', href: '/series', dropdown: 'series' },
     { title: '归档', href: '/archive' },
     { title: '关于', href: '/about' },
   ],

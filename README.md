@@ -24,7 +24,7 @@
 - ✅ 相关文章推荐
 - ✅ 回到顶部
 - ✅ RSS / Sitemap
-- ✅ 文章系列（左侧目录 + `/blog/series` 发现页）
+- ✅ 文章系列（左侧目录 + `/series` 发现页）
 
 ## 开发
 
@@ -75,11 +75,11 @@ npm run preview
 │   │   ├── index.astro      # 首页
 │   │   ├── about.astro      # 关于页
 │   │   ├── archive.astro    # 归档页
-│   │   ├── blog/
-│   │   │   ├── index.astro  # 文章列表页
-│   │   │   ├── [...slug].astro # 文章详情页
-│   │   │   ├── categories/[category].astro # 分类页
-│   │   │   └── tags/[tag].astro # 标签页
+│   │   ├── page/[page].astro # 首页分页（第 2 页起）
+│   │   ├── posts/[...slug].astro # 文章详情页
+│   │   ├── categories/[...category].astro # 分类页
+│   │   ├── tags/            # 标签索引与详情
+│   │   ├── series/          # 系列索引与详情
 │   │   └── rss.xml.ts       # RSS Feed
 │   ├── styles/              # 样式
 │   │   └── global.css       # 全局样式

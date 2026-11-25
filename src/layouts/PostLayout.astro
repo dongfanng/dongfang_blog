@@ -8,7 +8,7 @@ import TableOfContents from '@/components/article/TableOfContents.astro';
 import Comments from '@/components/article/Comments.astro';
 import SeriesNav from '@/components/article/SeriesNav.astro';
 import type { BlogPost, SeriesNav as SeriesNavData } from '@/utils/posts';
-import { getReadingTime, getWordCount, getSeriesHref } from '@/utils/posts';
+import { getReadingTime, getWordCount, getSeriesHref, getPostHref, getCategoryHref, getTagHref } from '@/utils/posts';
 import katexUrl from 'katex/dist/katex.min.css?url';
 
 interface Props {
@@ -34,7 +34,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
     <article data-pagefind-body>
     <header class="mb-8">
       <div class="flex flex-wrap items-center gap-3 mb-4">
-        <a href={`/blog/categories/${category}`} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+        <a href={getCategoryHref(category)} class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
           {category}
         </a>
         {seriesNav && (
@@ -66,7 +66,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
       <div class="flex flex-wrap gap-2">
         {tags.map((tag: string) => (
           <a
-            href={`/blog/tags/${tag}`}
+            href={getTagHref(tag)}
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
           >
             #{tag}
@@ -134,7 +134,7 @@ const hasMath = /\$\$[\s\S]*?\$\$|\$(?!\$)[^\n$]*?\$/.test(post.body);
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {related.map((p) => (
             <a
-              href={`/blog/${p.slug}`}
+              href={getPostHref(p.slug)}
               class="group p-4 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
             >
               <div class="font-medium text-gray-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors line-clamp-2">

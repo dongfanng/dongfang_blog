@@ -1,0 +1,14 @@
+---
+import { getCategoryHref } from '@/utils/posts';
+interface Props { categories: string[] }
+const { categories } = Astro.props;
+---
+<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+  <nav aria-label="文章分类" class="flex flex-wrap gap-2">
+    <a href="/" aria-current="page" class="px-3 py-1.5 rounded-full text-sm font-medium bg-primary-50 text-primary-700 dark:bg-primary-950/50 dark:text-primary-300">全部</a>
+    {categories.map((category) => (
+      <a href={getCategoryHref(category)} class="px-3 py-1.5 rounded-full text-sm bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">{category}</a>
+    ))}
+  </nav>
+  <a href="/tags" class="text-sm text-primary-500 dark:text-primary-400 hover:underline shrink-0">浏览全部标签 →</a>
+</div>

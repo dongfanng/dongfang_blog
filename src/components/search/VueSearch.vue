@@ -132,13 +132,13 @@ let searchVersion = 0;
 const devPosts: SearchResult[] = [
   {
     id: '1',
-    url: '/blog/2026/getting-started',
+    url: '/posts/2026/getting-started',
     meta: { title: '欢迎来到我的博客' },
     excerpt: '这是博客的第一篇文章，介绍一下这个博客的技术栈和未来的写作计划。使用了 Astro、Vue、Tailwind CSS、TypeScript 等技术。',
   },
   {
     id: '2',
-    url: '/blog/2026/astro-introduction',
+    url: '/posts/2026/astro-introduction',
     meta: { title: 'Astro 入门指南' },
     excerpt: '介绍 Astro 的基本概念和使用方法，帮助你快速上手这个优秀的静态站点生成器。核心概念包括群岛架构、组件语法等。',
   },

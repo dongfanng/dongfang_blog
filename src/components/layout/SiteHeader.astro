@@ -12,8 +12,8 @@ interface Props {
 const { seriesList } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 const inSection = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
-const activeHref = inSection('/blog/series')
-  ? '/blog/series'
+const activeHref = pathname === '/' || pathname.startsWith('/page/')
+  ? '/'
   : siteConfig.nav.find((item) => inSection(item.href))?.href;
 
 const desktopLinkClass =
@@ -54,7 +54,7 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
               </a>
               <div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                 <div class="rounded-xl border border-gray-200 bg-white/95 p-2 shadow-xl backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95">
-                  <a href="/blog/series" class:list={[seriesLinkClass, pathname === '/blog/series' ? seriesActiveClass : seriesIdleClass]}>
+                  <a href="/series" class:list={[seriesLinkClass, pathname === '/series' ? seriesActiveClass : seriesIdleClass]}>
                     <span class="font-medium">全部系列</span>
                     <span class="text-xs text-gray-400 dark:text-gray-500">{seriesList.length}</span>
                   </a>
@@ -127,9 +127,9 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
             </button>
             <div id="mobile-series-menu" class="hidden ml-3 border-l border-gray-200 py-1 pl-3 dark:border-gray-700">
               <a
-                href="/blog/series"
-                class:list={[seriesLinkClass, pathname === '/blog/series' ? seriesActiveClass : seriesIdleClass]}
-                aria-current={pathname === '/blog/series' ? 'page' : undefined}
+                href="/series"
+                class:list={[seriesLinkClass, pathname === '/series' ? seriesActiveClass : seriesIdleClass]}
+                aria-current={pathname === '/series' ? 'page' : undefined}
                 data-close-mobile
               >
                 <span class="font-medium">全部系列</span>

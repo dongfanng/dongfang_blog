@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPublishedPosts, sortPosts, groupPostsByYear } from '@/utils/posts';
+import { getPublishedPosts, sortPosts, groupPostsByYear, getPostHref } from '@/utils/posts';
 import { formatDate } from '@/utils/date';
 
 const posts = await getPublishedPosts();
@@ -32,7 +32,7 @@ const postsByYear = groupPostsByYear(sortedPosts);
                     {formatDate(post.data.pubDate)}
                   </span>
                   <a
-                    href={`/blog/${post.slug}`}
+                    href={getPostHref(post.slug)}
                     class="text-gray-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
                   >
                     {post.data.title}

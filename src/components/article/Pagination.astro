@@ -1,0 +1,15 @@
+---
+import { getHomePageHref } from '@/utils/posts';
+interface Props { currentPage: number; totalPages: number }
+const { currentPage, totalPages } = Astro.props;
+const linkClass = 'rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800';
+---
+{totalPages > 1 && (
+  <nav aria-label="文章分页" class="mt-8 flex flex-wrap items-center justify-center gap-2 text-sm">
+    {currentPage > 1 ? <a class={linkClass} href={getHomePageHref(currentPage - 1)}>← 上一页</a> : <span class="px-3 py-2 text-gray-400" aria-disabled="true">← 上一页</span>}
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <a href={getHomePageHref(page)} aria-current={page === currentPage ? 'page' : undefined} class:list={[linkClass, page === currentPage && 'bg-primary-50 font-semibold text-primary-700 dark:bg-primary-950/40 dark:text-primary-300']}>{page}</a>
+    ))}
+    {currentPage < totalPages ? <a class={linkClass} href={getHomePageHref(currentPage + 1)}>下一页 →</a> : <span class="px-3 py-2 text-gray-400" aria-disabled="true">下一页 →</span>}
+  </nav>
+)}

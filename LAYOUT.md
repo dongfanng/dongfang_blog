@@ -25,9 +25,9 @@
 | Header | `src/components/layout/SiteHeader.astro` | `container-prose` | 无（自身 h-16） |
 | Footer | `src/components/layout/Footer.astro` | `container-prose` | `py-12` |
 | 首页 | `src/pages/index.astro` | `container-prose` | `py-12` |
-| 博客列表 | `src/pages/blog/index.astro` | `container-prose` | `py-12` |
-| 分类页 | `src/pages/blog/categories/[category].astro` | `container-prose` | `py-12` |
-| 标签页 | `src/pages/blog/tags/[tag].astro` | `container-prose` | `py-12` |
+| 首页分页 | `src/pages/page/[page].astro` | `container-prose` | `py-12` |
+| 分类页 | `src/pages/categories/[...category].astro` | `container-prose` | `py-12` |
+| 标签页 | `src/pages/tags/[...tag].astro` | `container-prose` | `py-12` |
 | 归档 | `src/pages/archive.astro` | `container-prose` | `py-12` |
 | 关于 | `src/pages/about.astro` | `container-prose` | `py-12` |
 | 文章页 | `src/layouts/PostLayout.astro` | `container-prose` | `py-8` |

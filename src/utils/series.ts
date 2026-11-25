@@ -7,5 +7,5 @@ export type SeriesListItem = {
 
 /** 系列详情页路径（编码中文 / 空格等） */
 export function getSeriesHref(series: string): string {
-  return `/blog/series/${encodeURIComponent(series)}`;
+  return `/series/${encodeURIComponent(series)}`;
 }

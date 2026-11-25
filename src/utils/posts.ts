@@ -175,3 +175,15 @@ export function getSeriesNav(
     items,
   };
 }
+
+export const getPostHref = (slug: string) => `/posts/${slug}`;
+export const getCategoryHref = (category: string) => `/categories/${encodeURIComponent(category)}`;
+export const getTagHref = (tag: string) => `/tags/${encodeURIComponent(tag)}`;
+export const getHomePageHref = (page: number) => page <= 1 ? '/' : `/page/${page}`;
+
+export function paginatePosts(posts: BlogPost[], page: number, perPage: number) {
+  return {
+    posts: posts.slice((page - 1) * perPage, page * perPage),
+    totalPages: Math.ceil(posts.length / perPage),
+  };
+}

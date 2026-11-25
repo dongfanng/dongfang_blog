@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArticleCard from '@/components/article/ArticleCard.astro';
+import CategoryBar from '@/components/article/CategoryBar.astro';
+import Pagination from '@/components/article/Pagination.astro';
+import { getPublishedPosts, sortPosts, getCategories, paginatePosts } from '@/utils/posts';
+import { siteConfig } from '@/config/site';
+
+export async function getStaticPaths() {
+  const posts = sortPosts(await getPublishedPosts());
+  const totalPages = Math.ceil(posts.length / siteConfig.home.postsPerPage);
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
+    params: { page: String(index + 2) },
+    props: { posts, currentPage: index + 2 },
+  }));
+}
+const { posts, currentPage } = Astro.props;
+const { posts: pagePosts, totalPages } = paginatePosts(posts, currentPage, siteConfig.home.postsPerPage);
+---
+<BaseLayout title={`文章 · 第 ${currentPage} 页`}>
+  <div class="container-prose py-12">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">文章 · 第 {currentPage} / {totalPages} 页</h1>
+    <CategoryBar categories={getCategories(posts)} />
+    <div class="grid gap-6">
+      {pagePosts.map((post) => <ArticleCard post={post} />)}
+    </div>
+    <Pagination {currentPage} {totalPages} />
+  </div>
+</BaseLayout>
