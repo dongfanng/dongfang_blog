@@ -17,7 +17,7 @@ const activeHref = pathname === '/' || pathname.startsWith('/page/')
   : siteConfig.nav.find((item) => inSection(item.href))?.href;
 
 const desktopLinkClass =
-  'hidden sm:inline-flex h-11 items-center transition-colors hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-gray-900';
+  'inline-flex h-11 items-center transition-colors hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400 dark:focus-visible:ring-offset-gray-900';
 
 const mobileLinkClass =
   'block rounded-lg px-3 py-2.5 transition-colors hover:bg-gray-100 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:hover:bg-gray-800 dark:hover:text-primary-400 dark:focus-visible:ring-primary-400';
@@ -40,48 +40,46 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
         {siteConfig.name}
       </a>
 
-      <nav class="flex items-center gap-3">
-        {siteConfig.nav.map((item) =>
-          'dropdown' in item ? (
-            <div class="group relative hidden sm:block">
+      <nav class="flex h-full items-center gap-3">
+        <div class="hidden sm:flex h-full items-center gap-5 mr-2">
+          {siteConfig.nav.map((item) =>
+            'dropdown' in item ? (
+              <div class="group relative flex h-full items-center">
+                <a
+                  href={item.href}
+                  class:list={[desktopLinkClass, activeHref === item.href ? desktopActiveClass : desktopIdleClass]}
+                  aria-current={pathname === item.href ? 'page' : undefined}
+                >
+                  {item.title}
+                </a>
+                {seriesList.length > 0 && (
+                  <div class="invisible absolute left-0 top-full z-50 w-56 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                    <div class="-translate-y-1 rounded-xl border border-gray-200 bg-white/95 p-2 shadow-xl backdrop-blur-md transition-transform duration-150 group-hover:translate-y-0 group-focus-within:translate-y-0 motion-reduce:transition-none dark:border-gray-700 dark:bg-gray-900/95">
+                      {seriesList.map((series) => (
+                        <a
+                          href={getSeriesHref(series.name)}
+                          class:list={[seriesLinkClass, pathname === getSeriesHref(series.name) ? seriesActiveClass : seriesIdleClass]}
+                          aria-current={pathname === getSeriesHref(series.name) ? 'page' : undefined}
+                        >
+                          <span class="truncate">{series.name}</span>
+                          <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500">{series.count} 篇</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
               <a
                 href={item.href}
-                class:list={[desktopLinkClass, 'gap-1', activeHref === item.href ? desktopActiveClass : desktopIdleClass]}
+                class:list={[desktopLinkClass, activeHref === item.href ? desktopActiveClass : desktopIdleClass]}
                 aria-current={pathname === item.href ? 'page' : undefined}
               >
                 {item.title}
-                <Icon name="chevron-down" class="text-sm w-[1em] h-[1em] transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
               </a>
-              <div class="invisible absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                <div class="rounded-xl border border-gray-200 bg-white/95 p-2 shadow-xl backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95">
-                  <a href="/series" class:list={[seriesLinkClass, pathname === '/series' ? seriesActiveClass : seriesIdleClass]}>
-                    <span class="font-medium">全部系列</span>
-                    <span class="text-xs text-gray-400 dark:text-gray-500">{seriesList.length}</span>
-                  </a>
-                  {seriesList.length > 0 && <div class="my-1 border-t border-gray-100 dark:border-gray-800" />}
-                  {seriesList.map((series) => (
-                    <a
-                      href={getSeriesHref(series.name)}
-                      class:list={[seriesLinkClass, pathname === getSeriesHref(series.name) ? seriesActiveClass : seriesIdleClass]}
-                      aria-current={pathname === getSeriesHref(series.name) ? 'page' : undefined}
-                    >
-                      <span class="truncate">{series.name}</span>
-                      <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500">{series.count} 篇</span>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <a
-              href={item.href}
-              class:list={[desktopLinkClass, activeHref === item.href ? desktopActiveClass : desktopIdleClass]}
-              aria-current={pathname === item.href ? 'page' : undefined}
-            >
-              {item.title}
-            </a>
-          )
-        )}
+            )
+          )}
+        </div>
 
         <VueSearch client:idle />
 

@@ -1,5 +1,5 @@
 <template>
-  <div ref="searchContainer" class="relative flex items-center">
+  <div ref="searchContainer" class="relative flex h-full items-center">
     <!-- 桌面端搜索框（Firefly 风格） -->
     <div
       class="hidden lg:flex relative items-center h-11 rounded-lg transition-all
