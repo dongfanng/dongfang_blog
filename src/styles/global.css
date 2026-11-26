@@ -331,10 +331,39 @@
   content: none;
 }
 
-/* 复用容器 - 减少页面间重复，垂直 padding 由使用方按需添加 */
+/* 复用容器与通用交互类 - 减少页面间重复，垂直 padding 由使用方按需添加 */
 @layer components {
   .container-prose {
     @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* 通用流式折叠面板：通过 data-open="true" 切换；直接子元素负责裁切，垂直 padding 写在更内层 */
+  .collapse-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition-property: grid-template-rows, opacity, visibility;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .collapse-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .collapse-panel > * {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collapse-panel {
+      transition: none;
+    }
   }
 }
 

@@ -108,46 +108,16 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
     </div>
   </div>
 
-  <div id="mobile-menu" class="hidden sm:hidden border-t border-gray-200 dark:border-gray-800">
-    <div class="container-prose py-2">
-      {siteConfig.nav.map((item) =>
-        'dropdown' in item ? (
-          <div>
-            <button
-              type="button"
-              id="mobile-series-toggle"
-              class:list={[mobileLinkClass, 'flex w-full items-center justify-between', activeHref === item.href ? mobileActiveClass : mobileIdleClass]}
-              aria-expanded="false"
-              aria-controls="mobile-series-menu"
-            >
-              <span>{item.title}</span>
-              <Icon id="mobile-series-chevron" name="chevron-down" class="text-base w-[1em] h-[1em] transition-transform" />
-            </button>
-            <div id="mobile-series-menu" class="hidden ml-3 border-l border-gray-200 py-1 pl-3 dark:border-gray-700">
-              <a
-                href="/series"
-                class:list={[seriesLinkClass, pathname === '/series' ? seriesActiveClass : seriesIdleClass]}
-                aria-current={pathname === '/series' ? 'page' : undefined}
-                data-close-mobile
-              >
-                <span class="font-medium">全部系列</span>
-                <span class="text-xs text-gray-400 dark:text-gray-500">{seriesList.length}</span>
-              </a>
-              {seriesList.length > 0 && <div class="my-1 border-t border-gray-100 dark:border-gray-800" />}
-              {seriesList.map((series) => (
-                <a
-                  href={getSeriesHref(series.name)}
-                  class:list={[seriesLinkClass, pathname === getSeriesHref(series.name) ? seriesActiveClass : seriesIdleClass]}
-                  aria-current={pathname === getSeriesHref(series.name) ? 'page' : undefined}
-                  data-close-mobile
-                >
-                  <span class="truncate">{series.name}</span>
-                  <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500">{series.count} 篇</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        ) : (
+  <div
+    id="mobile-menu"
+    data-open="false"
+    aria-hidden="true"
+    inert
+    class="collapse-panel sm:hidden border-t border-transparent transition-[grid-template-rows,opacity,visibility,border-color] duration-200 ease-out motion-reduce:transition-none data-[open=true]:border-gray-900/10 dark:data-[open=true]:border-white/10"
+  >
+    <div>
+      <div class="container-prose py-2">
+        {siteConfig.nav.map((item) => (
           <a
             href={item.href}
             class:list={[mobileLinkClass, activeHref === item.href ? mobileActiveClass : mobileIdleClass]}
@@ -156,25 +126,31 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
           >
             {item.title}
           </a>
-        )
-      )}
+        ))}
+      </div>
     </div>
   </div>
 </header>
 
 <script>
+  let headerAbortController: AbortController | null = null;
+
   function bindHeader() {
     const themeToggle = document.getElementById('theme-toggle');
     if (!themeToggle || themeToggle.dataset.bound === '1') return;
     themeToggle.dataset.bound = '1';
 
+    headerAbortController?.abort();
+    headerAbortController = new AbortController();
+    const { signal } = headerAbortController;
+
     const menuToggle = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     const iconMenu = document.getElementById('icon-menu');
     const iconClose = document.getElementById('icon-close');
-    const seriesToggle = document.getElementById('mobile-series-toggle');
-    const seriesMenu = document.getElementById('mobile-series-menu');
-    const seriesChevron = document.getElementById('mobile-series-chevron');
+
+    let openScrollY = 0;
+    const isMobileOpen = () => menuToggle?.getAttribute('aria-expanded') === 'true';
 
     themeToggle.addEventListener('click', () => {
       const next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
@@ -183,32 +159,54 @@ const seriesIdleClass = 'text-gray-600 dark:text-gray-300';
     });
 
     const setMobileOpen = (open: boolean) => {
-      mobileMenu?.classList.toggle('hidden', !open);
+      if (!mobileMenu) return;
+      mobileMenu.dataset.open = String(open);
+      mobileMenu.setAttribute('aria-hidden', String(!open));
+      mobileMenu.inert = !open;
       menuToggle?.setAttribute('aria-expanded', String(open));
       iconMenu?.classList.toggle('hidden', open);
       iconClose?.classList.toggle('hidden', !open);
-      if (!open) {
-        seriesMenu?.classList.add('hidden');
-        seriesToggle?.setAttribute('aria-expanded', 'false');
-        seriesChevron?.classList.remove('rotate-180');
+      if (open) {
+        openScrollY = window.scrollY;
       }
     };
 
     menuToggle?.addEventListener('click', () => {
-      const open = menuToggle.getAttribute('aria-expanded') !== 'true';
-      setMobileOpen(open);
-    });
-
-    seriesToggle?.addEventListener('click', () => {
-      const open = seriesToggle.getAttribute('aria-expanded') !== 'true';
-      seriesToggle.setAttribute('aria-expanded', String(open));
-      seriesMenu?.classList.toggle('hidden', !open);
-      seriesChevron?.classList.toggle('rotate-180', open);
+      setMobileOpen(!isMobileOpen());
     });
 
     document.querySelectorAll('[data-close-mobile]').forEach((el) => {
       el.addEventListener('click', () => setMobileOpen(false));
     });
+
+    document.addEventListener(
+      'click',
+      (e) => {
+        if (!isMobileOpen()) return;
+        const target = e.target as Node | null;
+        if (target && (mobileMenu?.contains(target) || menuToggle?.contains(target))) return;
+        setMobileOpen(false);
+      },
+      { signal }
+    );
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (isMobileOpen() && Math.abs(window.scrollY - openScrollY) > 10) {
+          setMobileOpen(false);
+        }
+      },
+      { signal, passive: true }
+    );
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key === 'Escape' && isMobileOpen()) setMobileOpen(false);
+      },
+      { signal }
+    );
   }
 
   document.addEventListener('astro:page-load', bindHeader);
